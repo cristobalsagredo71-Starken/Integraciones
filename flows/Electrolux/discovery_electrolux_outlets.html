@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery - Electrolux: Outlets Regionales (Tarificación y Retiros)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge-approve {
+            background: #ecfdf5;
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #34d399;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            color: var(--secondary);
+        }
+        .tab.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+        
+        /* Content */
+        .tab-content {
+            position: absolute;
+            visibility: hidden;
+            width: 100%;
+            top: -9999px;
+            opacity: 0;
+        }
+        .tab-content.active {
+            position: relative;
+            visibility: visible;
+            top: 0;
+            opacity: 1;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Mermaid Container */
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        /* Forzar al SVG de Mermaid a usar el ancho disponible y no miniaturizarse */
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--border);
+            background: #f8fafc;
+        }
+        .card-pro { border-left-color: #10b981; }
+        .card-con { border-left-color: #ef4444; }
+        .card-info { border-left-color: var(--secondary); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Discovery: Outlets Regionales (Corrección de Tarifa y Retiros)</h1>
+            <span class="badge-approve">ESTADO: PROPUESTA DE ARQUITECTURA (TO-BE)</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tab1', event)">1. Diagnóstico del Dolor</button>
+            <button class="tab" onclick="switchTab('tab2', event)">2. Flujo de Arquitectura</button>
+            <button class="tab" onclick="switchTab('tab3', event)">3. Impacto Operativo y Riesgos</button>
+        </div>
+
+        <!-- TAB 1: PROBLEMA Y SOLUCIÓN -->
+        <div id="tab1" class="tab-content active">
+            <h2>El Doble Dolor de los Outlets (AS-IS)</h2>
+            <p>La operación regional de Electrolux sufre actualmente de dos deficiencias críticas derivadas de cómo funciona su e-commerce en VTEX:</p>
+            
+            <ol>
+                <li><strong>Fuga Financiera por Mala Tarificación:</strong> VTEX está configurado con una cuenta global anclada a la dirección de Santiago. Cuando un Outlet en Viña del Mar vende un producto hacia Rancagua, VTEX le dice a Starken que el origen es Santiago. <strong>El resultado:</strong> Starken cobra la tarifa de Santiago->Rancagua, cuando el costo físico real para Starken es de Viña->Rancagua. Esto genera pérdida de margen o sobrecobros injustos.</li>
+                <li><strong>Caos Operativo (Falsos Fletes):</strong> Al ser una operación regional, Electrolux debía pedir a mano (vía correo) a SAC que mandara camiones a buscar la carga a los Outlets. Para saltarse los correos, acordaron retiros fijos ciegos todos los días. Starken terminó enviando camiones vacíos a Outlets que no tenían ventas ese día (falsos fletes).</li>
+            </ol>
+            
+            <div class="card card-info">
+                <h3>La Solución (TO-BE): Interceptación y Sobreescritura</h3>
+                <p>Para curar ambos dolores sin que Electrolux toque el código de VTEX, la API Core de Starken actuará como un "Man-in-the-Middle" inteligente:</p>
+                <ul>
+                    <li><strong>Mapeo de Sellers:</strong> Starken mantendrá una tabla interna que asocia el <code>seller_id</code> de VTEX con la <strong>dirección física real</strong> del Outlet.</li>
+                    <li><strong>Mutación del Origen:</strong> Antes de cotizar y crear la OF, Starken borrará el origen falso de VTEX (Santiago) y lo reemplazará por la dirección real del Seller. Así, la matriz tarifaria cobra perfecto.</li>
+                    <li><strong>Agendamiento por Demanda:</strong> Automáticamente, al generarse la OF con origen en región, el sistema inyecta una solicitud de retiro al TMS de Starken solo para ese día y ese Outlet. Adiós a los viajes muertos.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 2: FLUJO DE ARQUITECTURA -->
+        <div id="tab2" class="tab-content">
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    graph LR
+                    subgraph Electrolux ["Capa Cliente (VTEX)"]
+                        V1((Inicio)) --> V2["Pedido pasa a Facturado"]
+                        V2 --> V3["Notificación a Starken"]
+                    end
+
+                    subgraph Starken ["Capa Core (Starken API)"]
+                        S1["Recepción de Orden"] --> S2{"¿Es Outlet Regional?"}
+                        
+                        S2 -->|No Central| S3["Mantiene Origen Santiago"]
+                        
+                        S2 -->|Sí Regional| S4["Sobreescribe Remitente a Outlet"]
+                        S4 --> S5["Cotiza y Genera OF Regional"]
+                        
+                        S5 --> S6{"¿Hay retiro agendado?"}
+                        
+                        S6 -->|No| S7["Inyecta Solicitud de Retiro"]
+                        S6 -->|Sí| S8["Asocia carga a camión"]
+                        
+                        S3 --> S9((Fin))
+                        S7 --> S9
+                        S8 --> S9
+                    end
+
+                    V3 -->|Webhook| S1
+
+                    classDef inicio fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                    classDef fin fill:#EF4444,stroke:#B91C1C,stroke-width:2px,color:#fff;
+                    classDef decision fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#fff;
+                    classDef backend fill:#F1F5F9,stroke:#3B82F6,stroke-width:2px;
+                    classDef frontend fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                    
+                    class V1 inicio;
+                    class S9 fin;
+                    class S2,S6 decision;
+                    class S1,S3,S4,S5,S7,S8 backend;
+                    class V2,V3 frontend;
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; background-color: white; padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                <h3 style="margin-top: 0;">📖 Lectura del Flujo de Transformación</h3>
+                <p>El punto crítico ocurre en el nodo <strong>"Sobreescribe Remitente"</strong>. Al alterar el origen antes de que el pedido toque el motor de precios (tarifador) de Starken, logramos que la facturación sea matemáticamente precisa para operaciones regionales. Simultáneamente, disparamos la solicitud automática de retiro, eliminando la intervención humana de SAC.</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: IMPACTO -->
+        <div id="tab3" class="tab-content">
+            <div class="grid">
+                <div class="card card-pro">
+                    <h3>👍 Beneficios Financieros y Logísticos</h3>
+                    <ul>
+                        <li><strong>Precisión Tarifaria:</strong> Starken cobra exactamente lo que cuesta el tramo regional, cerrando las fugas de dinero por diferencias de facturación con el cliente.</li>
+                        <li><strong>Cero Falsos Fletes:</strong> Al matar el "retiro fijo ciego", el transporte de Starken gasta combustible solo cuando existe carga confirmada por sistema en el Outlet.</li>
+                        <li><strong>Experiencia Seamless:</strong> Electrolux escala a nivel nacional operando decenas de Outlets bajo una sola cuenta de VTEX, sin darse cuenta del trabajo de traducción que hacemos por debajo.</li>
+                    </ul>
+                </div>
+
+                <div class="card card-con">
+                    <h3>⚠️ Riesgos y Obligaciones (Reglas de Juego)</h3>
+                    <ul>
+                        <li><strong>Dependencia del Maestro de Sellers:</strong> Si Electrolux abre un Outlet nuevo en Antofagasta y no nos manda el <code>seller_id</code> para cargarlo en nuestra matriz, nuestro Core no lo detectará. Le cobrará tarifa desde Santiago y no mandará camión.
+                            <br/><span style="color: var(--accent); font-size: 0.9em;">↳ <strong>Regla Comercial:</strong> Por contrato, la creación de nuevos Outlets debe notificarse con 48hrs a la mesa de ayuda TI de Starken para actualizar la matriz antes de prender la venta en VTEX.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

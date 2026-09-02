@@ -1,0 +1,5 @@
+﻿content = open('app.js', 'r', encoding='utf-8').read()
+content = content.replace('Jira -', 'Jira \u2197')
+content = content.replace('Confluence -', 'Confluence \u2197')
+open('app.js', 'w', encoding='utf-8').write(content)
+print("Restored Jira badge arrows")

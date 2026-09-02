@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Interactiva Avanzada - Hermanado Ripley</title>
+<style>
+:root {
+  --primary: #0f172a;
+  --secondary: #64748b;
+  --accent: #2563eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--primary);
+  margin: 0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.header p {
+  color: var(--secondary);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.panel-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+}
+
+/* Mobile App */
+.mobile-app {
+  border: 4px solid var(--primary);
+  border-radius: 24px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  background: #f1f5f9;
+}
+
+.mobile-header {
+  background: var(--primary);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+  position: relative;
+}
+
+/* Laser Input */
+.laser-input-container {
+  background: white;
+  padding: 1rem;
+  border-bottom: 2px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.laser-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.laser-input:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.laser-line {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: red;
+  box-shadow: 0 0 5px red;
+  pointer-events: none;
+  animation: scan 2s infinite ease-in-out;
+  opacity: 0.5;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-15px); }
+  50% { transform: translateY(15px); }
+  100% { transform: translateY(-15px); }
+}
+
+.scanner-area {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.box-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.2s;
+}
+
+.box-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.box-item.scanned {
+  opacity: 0.5;
+  pointer-events: none;
+  background: #f8fafc;
+}
+
+.barcode-visual {
+  font-family: 'Libre Barcode 39', monospace, sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: -2px;
+  color: var(--primary);
+}
+
+/* Printer */
+.printer-container {
+  background: white;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.printer-slot {
+  width: 150px;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  position: relative;
+  z-index: 10;
+}
+
+.printer-paper {
+  width: 140px;
+  height: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  margin-top: 0;
+  transition: height 0.5s ease-out;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+  font-family: monospace;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.printer-paper.printing {
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+/* Dashboard */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.status-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.status-card h3 {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pallet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-height: 100px;
+}
+
+.pallet-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Progress bar */
+.progress-bg {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-pending { background: #fef3c7; color: #b45309; }
+.badge-success { background: #d1fae5; color: #047857; }
+.badge-rezago { background: #fee2e2; color: #b91c1c; }
+
+.controls {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-danger {
+  background: white;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+.btn-danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--secondary);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--primary);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Demo: Semáforo de Completitud (Ripley)</h1>
+  <p>Escanea haciendo clic en las cajas o escribiendo el código de bulto en el input (ej. B1, B2).</p>
+</div>
+
+<div class="layout">
+  <!-- Mobile App -->
+  <div class="mobile-app">
+    <div class="mobile-header">📱 App In-House (Pistoleo)</div>
+    
+    <div class="laser-input-container">
+      <input type="text" id="barcodeInput" class="laser-input" placeholder="Haz clic y dispara pistola (ej. B1)" autocomplete="off">
+      <div class="laser-line"></div>
+    </div>
+
+    <div class="scanner-area" id="scannerArea">
+      <!-- Boxes will be rendered here via JS -->
+    </div>
+
+    <div class="printer-container">
+      <div style="font-size: 0.7rem; color: var(--secondary); margin-bottom: 5px;">Impresora Bluetooth</div>
+      <div class="printer-slot"></div>
+      <div id="printer-paper" class="printer-paper">
+        <strong>OF STK-<span id="print-of"></span></strong>
+        <span id="print-cud"></span>
+        <div class="barcode-visual" style="font-size: 1rem; margin-top: 5px;">||||||||||</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="panel">
+    <div class="panel-title">
+      <span>🖥️ Orquestador Core (Base de Datos)</span>
+      <span class="badge badge-success">● API Ripley Activa</span>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="status-card">
+        <h3>📦 Pallet de Gestión (En Espera)</h3>
+        <p style="font-size: 0.8rem; color: var(--secondary); margin-top:-5px;">Bultos esperando a sus hermanos.</p>
+        <ul class="pallet-list" id="gestionList"></ul>
+      </div>
+
+      <div class="status-card">
+        <h3>✅ Despacho (100% Completos)</h3>
+        <p style="font-size: 0.8rem; color: var(--secondary); margin-top:-5px;">CUDs hermanados listos para carga.</p>
+        <ul class="pallet-list" id="despachoList"></ul>
+      </div>
+    </div>
+
+    <div class="status-card" style="margin-top: 1.5rem; background: #fef2f2; border-color: #fca5a5;">
+      <h3 style="color: var(--danger)">🛑 Pallet de Rezago del Día</h3>
+      <p style="font-size: 0.8rem; color: var(--secondary); margin-top:-5px;">Carga huérfana aislada al cierre de turno. Requiere investigación.</p>
+      <ul class="pallet-list" id="rezagoList"></ul>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-secondary" onclick="resetDemo()">↻ Reiniciar Demo</button>
+      <button class="btn btn-danger" onclick="cierreTurno()">Simular Fin de Turno</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Notificación</div>
+
+<script>
+// --- Audio Synthesis for Beeps ---
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new AudioContext();
+}
+
+function playTone(freq, type, duration, vol = 0.1) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+function beepScan() { initAudio(); playTone(1200, 'sine', 0.1, 0.1); }
+function beepSuccess() { 
+  initAudio(); 
+  playTone(800, 'sine', 0.1); 
+  setTimeout(() => playTone(1200, 'sine', 0.15), 100); 
+}
+function beepError() { initAudio(); playTone(300, 'sawtooth', 0.3, 0.2); }
+// ----------------------------------
+
+// Initial State Template
+const INITIAL_CUD_DATA = {
+  "CUD-101": { total: 3, current: 0 },
+  "CUD-102": { total: 1, current: 0 },
+  "CUD-103": { total: 2, current: 0 }
+};
+
+const INITIAL_BOXES = [
+  { code: "B1", cud: "CUD-101", desc: "Caja 1/3 (CUD-101)" },
+  { code: "B2", cud: "CUD-102", desc: "Caja 1/1 (CUD-102)" },
+  { code: "B3", cud: "CUD-101", desc: "Caja 2/3 (CUD-101)" },
+  { code: "B4", cud: "CUD-103", desc: "Caja 1/2 (CUD-103)" },
+  { code: "B5", cud: "CUD-101", desc: "Caja 3/3 (CUD-101)" }
+];
+
+let cudData = {};
+let boxesState = {};
+let isTurnoCerrado = false;
+
+function resetDemo() {
+  cudData = JSON.parse(JSON.stringify(INITIAL_CUD_DATA)); // Deep copy
+  boxesState = {};
+  isTurnoCerrado = false;
+  INITIAL_BOXES.forEach(b => boxesState[b.code] = { ...b, scanned: false });
+  
+  document.getElementById('despachoList').innerHTML = '';
+  document.getElementById('rezagoList').innerHTML = '';
+  document.getElementById('barcodeInput').value = '';
+  document.getElementById('barcodeInput').disabled = false;
+  
+  renderBoxes();
+  updateDashboard();
+  showToast("Demo Reiniciada", true);
+}
+
+function renderBoxes() {
+  const container = document.getElementById('scannerArea');
+  container.innerHTML = '';
+  
+  Object.values(boxesState).forEach(box => {
+    const div = document.createElement('div');
+    div.className = `box-item ${box.scanned ? 'scanned' : ''}`;
+    div.onclick = () => { if(!box.scanned && !isTurnoCerrado) processScan(box.code); };
+    
+    div.innerHTML = `
+      <div>
+        <div style="font-weight: 600; font-size: 0.9rem;">${box.code}</div>
+        <div style="font-size: 0.75rem; color: var(--secondary);">${box.desc}</div>
+      </div>
+      <div class="barcode-visual">||||||||</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// Escuchar Enter en el input simulando pistola láser
+document.getElementById('barcodeInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    const code = this.value.trim().toUpperCase();
+    this.value = '';
+    processScan(code);
+  }
+});
+
+function processScan(code) {
+  if (isTurnoCerrado) {
+    beepError();
+    showToast("Error: El turno está cerrado.", false);
+    return;
+  }
+
+  const box = boxesState[code];
+  if (!box) {
+    beepError();
+    showToast(`Error: Código ${code} no reconocido.`, false);
+    return;
+  }
+
+  if (box.scanned) {
+    beepError();
+    showToast(`Error: Bulto ${code} ya fue escaneado.`, false);
+    return;
+  }
+
+  // Marcar escaneado
+  box.scanned = true;
+  const data = cudData[box.cud];
+  data.current++;
+
+  if (data.current === data.total) {
+    beepSuccess();
+    showToast(`✅ Hermanado Exitoso: ${box.cud} al 100%. Imprimiendo OF...`);
+    printLabel(box.cud);
+    moveToDespacho(box.cud);
+  } else {
+    beepScan();
+    // Cambiado para que no parezca un error (fondo verde/neutral en vez de rojo)
+    showToast(`📦 Bulto escaneado (${data.current}/${data.total}). Retenido a la espera del resto.`, true);
+  }
+
+  renderBoxes();
+  updateDashboard();
+}
+
+function printLabel(cud) {
+  const paper = document.getElementById('printer-paper');
+  document.getElementById('print-of').textContent = Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('print-cud').textContent = cud;
+  
+  // Remove class to reset transition, force reflow, add back
+  paper.classList.remove('printing');
+  void paper.offsetWidth; 
+  paper.classList.add('printing');
+  
+  setTimeout(() => {
+    paper.classList.remove('printing');
+  }, 3500);
+}
+
+function updateDashboard() {
+  const gestionList = document.getElementById('gestionList');
+  gestionList.innerHTML = '';
+  let hasPending = false;
+
+  Object.keys(cudData).forEach(cud => {
+    const data = cudData[cud];
+    if (data.current > 0 && data.current < data.total && !data.rezago) {
+      hasPending = true;
+      const pct = (data.current / data.total) * 100;
+      
+      const li = document.createElement('li');
+      li.className = 'pallet-item';
+      li.innerHTML = `
+        <div class="item-header">
+          <span style="font-weight: 600;">${cud}</span>
+          <span class="badge badge-pending">${data.current} de ${data.total} Cajas</span>
+        </div>
+        <div class="progress-bg">
+          <div class="progress-fill" style="width: ${pct}%"></div>
+        </div>
+      `;
+      gestionList.appendChild(li);
+    }
+  });
+
+  if (!hasPending) {
+    gestionList.innerHTML = '<li style="color: #94a3b8; font-size: 0.9rem; text-align: center; padding: 1rem; border: 1px dashed #cbd5e1; border-radius: 6px;">Pallet vacío</li>';
+  }
+}
+
+function moveToDespacho(cud) {
+  const despachoList = document.getElementById('despachoList');
+  const li = document.createElement('li');
+  li.className = 'pallet-item';
+  li.innerHTML = `
+    <div class="item-header" style="margin-bottom:0;">
+      <span style="font-weight: 600;">${cud}</span>
+      <span class="badge badge-success">✓ OF Emitida</span>
+    </div>
+  `;
+  despachoList.insertBefore(li, despachoList.firstChild);
+}
+
+function cierreTurno() {
+  if (isTurnoCerrado) return;
+  isTurnoCerrado = true;
+  document.getElementById('barcodeInput').disabled = true;
+
+  let rezagoCount = 0;
+  const rezagoList = document.getElementById('rezagoList');
+
+  Object.keys(cudData).forEach(cud => {
+    const data = cudData[cud];
+    if (data.current > 0 && data.current < data.total && !data.rezago) {
+      data.rezago = true;
+      rezagoCount++;
+      
+      const li = document.createElement('li');
+      li.className = 'pallet-item';
+      li.innerHTML = `
+        <div class="item-header" style="margin-bottom:0;">
+          <span style="font-weight: 600;">${cud}</span>
+          <span class="badge badge-rezago">Faltan ${data.total - data.current} caja(s)</span>
+        </div>
+      `;
+      rezagoList.appendChild(li);
+    }
+  });
+
+  if (rezagoCount > 0) {
+    beepError();
+    showToast(`🛑 Fin de Turno. ${rezagoCount} pedido(s) a cuarentena (Rezago).`, false);
+  } else {
+    beepSuccess();
+    showToast(`✅ Fin de Turno. Piso operativo limpio.`);
+  }
+
+  updateDashboard();
+}
+
+function showToast(msg, isSuccess = true) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.background = isSuccess ? 'var(--success)' : 'var(--danger)';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', resetDemo);
+// Wake up audio context on first click
+document.body.addEventListener('click', initAudio, {once: true});
+
+</script>
+</body>
+</html>

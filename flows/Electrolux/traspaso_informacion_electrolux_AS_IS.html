@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handoffs: Integración VTEX - Electrolux (AS-IS)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #ef4444; /* Rojo para alertar AS-IS */
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge-asis {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #ef4444;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Tabs Styles */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .tab-button.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        .tab-button:hover:not(.active) {
+            background: #e2e8f0;
+        }
+        .tab-content {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .tab-content.active {
+            position: relative;
+            left: auto;
+            opacity: 1;
+            pointer-events: auto;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        .description-box {
+            background-color: #f1f5f9;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Diagramas de Handoffs (Traspaso de Responsabilidad)</h1>
+            <span class="badge-asis">FLUJO DE DATOS Y RESPONSABILIDAD (AS-IS)</span>
+        </div>
+
+        <p>Estos <strong>Diagramas de Secuencia</strong> ilustran las fugas operativas del estado actual. Muestran cómo la integración funciona como una "tubería pasiva", traspasando datos crudos de VTEX al Core sin tratamiento inteligente, lo que genera problemas logísticos físicos.</p>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('bultos', this)">Pedida 1: Problema Multibulto</button>
+            <button class="tab-button" onclick="openTab('sellers', this)">Pedida 2: Problema Origen Outlets</button>
+        </div>
+
+        <!-- TAB 1: BULTOS -->
+        <div id="bultos" class="tab-content active">
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        actor C as Cliente Final
+                        participant V as VTEX (Electrolux)
+                        participant M as Middleware (Pasivo)
+                        participant S as Core (Starken)
+
+                        C->>V: Paga Carrito de Compras (Ej: Aire Acondicionado)
+                        
+                        activate V
+                        Note over V: La pelota la tiene Electrolux
+                        V->>V: Cambia estado a "Invoiced"
+                        V->>M: Webhook Aviso ("Hay orden nueva")
+                        deactivate V
+                        
+                        activate M
+                        Note over M: La pelota pasa a Starken
+                        M->>V: GET /getOrder
+                        activate V
+                        V-->>M: Responde JSON (SKU="AireAcond", Qty=1)
+                        deactivate V
+                        
+                        Note over M: FALLA AS-IS: Ausencia de Cerebro
+                        M->>M: Pasa el dato crudo sin evaluar
+                        
+                        M->>S: Inyecta Datos (Bultos = 1)
+                        activate S
+                        Note over S: La pelota pasa al Core
+                        S->>S: Crea OF con 1 etiqueta
+                        S-->>M: Retorna OF
+                        deactivate S
+                        
+                        M->>V: Notifica N° Seguimiento
+                        deactivate M
+                        
+                        Note over S,C: CONSECUENCIA OPERATIVA: En bodega hay 2 cajas (consola y motor). Solo hay 1 etiqueta. Riesgo de pérdida (Bulto ciego).
+                </div>
+            </div>
+            <div class="description-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Diagnóstico AS-IS: Problema Multibulto</h3>
+                <p>Actualmente, el Middleware actúa como un repetidor pasivo. VTEX envía comercialmente "1 unidad", y Starken imprime "1 etiqueta". Esto provoca que en los productos de Línea Blanca que físicamente vienen en múltiples cajas separadas, queden bultos sin rotular en la bodega, rompiendo la cadena de trazabilidad operativa.</p>
+            </div>
+        </div>
+
+        <!-- TAB 2: SELLERS -->
+        <div id="sellers" class="tab-content">
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        actor C as Cliente Final
+                        participant V as VTEX (Electrolux)
+                        participant M as Middleware (Pasivo)
+                        participant S as Core (Starken)
+
+                        C->>V: Compra desde Outlet Antofagasta
+                        
+                        activate V
+                        Note over V: La pelota la tiene Electrolux
+                        V->>V: Cambia estado a "Invoiced"
+                        V->>M: Webhook Aviso ("Hay orden nueva")
+                        deactivate V
+                        
+                        activate M
+                        Note over M: La pelota pasa a Starken
+                        M->>V: GET /getOrder
+                        activate V
+                        V-->>M: Responde JSON (incluye seller_id="Outlet_Antofagasta")
+                        deactivate V
+                        
+                        Note over M: FALLA AS-IS: Pérdida de Contexto Geográfico
+                        M->>M: Omite lectura del seller_id
+                        M->>M: Asigna Origen por Defecto (Santiago)
+                        
+                        M->>S: Inyecta Datos (Origen = Santiago)
+                        activate S
+                        Note over S: La pelota pasa al Core
+                        S->>S: Tarifa OF como Santiago-Destino
+                        S-->>M: Retorna OF tarifada erróneamente
+                        deactivate S
+                        
+                        M->>M: Gatilla retiro en bodega matriz (Santiago)
+                        deactivate M
+                        
+                        Note over S,C: CONSECUENCIA OPERATIVA: Fuga de ingresos por mal tarifado volumétrico y asignación errónea de flota.
+                </div>
+            </div>
+            <div class="description-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Diagnóstico AS-IS: Problema de Sellers (Origen)</h3>
+                <p>El sistema actual ignora el origen dinámico de la mercancía. Todos los pedidos, sin importar de qué sucursal de Electrolux provengan, son inyectados al Core de Starken asumiendo Santiago como origen. Esto genera cobros inexactos, rutas de retiro fallidas y retrasos severos en los tiempos de entrega pactados.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openTab(tabName, buttonElement) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            buttonElement.classList.add("active");
+        }
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

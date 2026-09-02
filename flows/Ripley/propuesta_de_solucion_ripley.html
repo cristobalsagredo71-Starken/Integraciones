@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Solución - Integración Ripley: Hermanado y Emisión</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge-approve {
+            background: #ecfdf5;
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #34d399;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            color: var(--secondary);
+        }
+        .tab.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+        
+        /* Content */
+        .tab-content {
+            position: absolute;
+            visibility: hidden;
+            width: 100%;
+            top: -9999px;
+            opacity: 0;
+        }
+        .tab-content.active {
+            position: relative;
+            visibility: visible;
+            top: 0;
+            opacity: 1;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Mermaid Container */
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+            height: auto;
+        }
+        
+        /* Forzar al SVG de Mermaid a usar el ancho disponible */
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--border);
+            background: #f8fafc;
+        }
+        .card-pro { border-left-color: #10b981; }
+        .card-con { border-left-color: #ef4444; }
+        .card-info { border-left-color: var(--secondary); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Propuesta de Solución: Integración Ripley (Hermanado y Emisión Automática)</h1>
+            <span class="badge-approve">ESTADO: ARQUITECTURA TO-BE (MODO AUTÓNOMO)</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tab1', event)">1. Diagnóstico del Dolor</button>
+            <button class="tab" onclick="switchTab('tab2', event)">2. Flujo de Negocio</button>
+            <button class="tab" onclick="switchTab('tab3', event)">3. Flujo Técnico</button>
+            <button class="tab" onclick="switchTab('tab4', event)">4. Impacto Operativo y Riesgos</button>
+        </div>
+
+        <!-- TAB 1: PROBLEMA Y SOLUCIÓN -->
+        <div id="tab1" class="tab-content active">
+            <h2>El Dolor Operativo y Financiero (AS-IS)</h2>
+            <p>La operación logística in-house de Ripley enfrentaba problemáticas críticas originadas por la desconexión sistémica y la emisión manual:</p>
+            
+            <ol>
+                <li><strong>Discrepancias Financieras por Emisión Manual:</strong> El equipo in-house emitía Órdenes de Flete (OF) incompletas manualmente, lo que obligaba a Facturación a realizar engorrosas consolidaciones manuales posteriores.</li>
+                <li><strong>Trazabilidad y Riesgo de Marca:</strong> Ambigüedad de bultos (orfandad) y falta de control sobre las exigentes normativas de última milla dictadas por el "Manual de Letra Chica" de Ripley (prohibición de fotos a carnet, reglas de apertura de TVs, etc.).</li>
+                <li><strong>Ineficiencia en Bodega:</strong> Los operarios caminaban inútilmente hacia un computador central para validar y emitir cada bulto de forma individual.</li>
+            </ol>
+            
+            <div class="card card-info">
+                <h3>La Solución (TO-BE): Hermanado Sistémico y Emisión Restringida</h3>
+                <p>Para subsanar las ineficiencias y proteger la facturación, la arquitectura se sustenta en la dependencia del CUD (Código Único de Despacho) y el concepto de <strong>"Hermanado"</strong>:</p>
+                <ul>
+                    <li><strong>Semáforo de Completitud:</strong> La app In-House consultará directamente la API de Ripley al pinchar un cartón. El Orquestador Starken acumulará los bultos en la base de datos hasta verificar que el pedido esté completo.</li>
+                    <li><strong>Emisión Cero Errores:</strong> Solo cuando el orquestador valida la completitud total del pedido, se desencadena la creación automática de la OF y la etiqueta. Se suprime la creación manual de OFs por parte del in-house.</li>
+                    <li><strong>Equipamiento Móvil:</strong> Se integrará al flujo una terminal celular más una impresora Bluetooth en el punto de trabajo del operario, permitiendo agilidad sin desplazamientos.</li>
+                    <li><strong>Gestión Eficiente y Cero Acumulación Ciega:</strong> A través de la orquestación de "Pallets de Gestión" y "Pallets de Rezago", el in-house mantiene el piso ordenado. Se evita la acumulación pasiva de carga; los bultos huérfanos o incompletos se asignan al rezago del día para su análisis posterior sin entorpecer el flujo de salida diario, resolviendo el problema de atochamiento.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 2: FLUJO DE NEGOCIO -->
+        <div id="tab2" class="tab-content">
+            
+            <h2 style="color: var(--primary); margin-top: 0;">Flujo de Negocio (Value Stream)</h2>
+            <p style="margin-bottom: 1rem;">Perspectiva operativa y de valor: cómo la regla de hermanado blinda la facturación y protege la operación de bodega.</p>
+            <div class="mermaid-container" style="margin-top: 1rem;">
+                <div class="mermaid">
+                    graph LR
+                        subgraph Ripley ["🏢 Cliente (Ripley)"]
+                            R1["Recepción de Tracking\npor Código Único (CUD)"]
+                            R2["Protección de Marca\ny Privacidad del Consumidor"]
+                        end
+                        
+                        subgraph InHouse ["📦 Operación In-House (Bodega Ripley)"]
+                            O1((Inicio)) --> O2["Operario Escanea\nBulto Físico"]
+                            O3["Etiquetado y Carga a\nPallet de Despacho"]
+                            O4["Aislamiento en\nPallet de Rezago Diario"]
+                        end
+
+                        subgraph Starken ["🛡️ Orquestador (Reglas de Starken)"]
+                            S1["Verificación Cruzada\ncon Pedido Original"]
+                            S2{"¿Pedido 100%\nCompleto?"}
+                            S3["Generación Automática\nde Orden de Flete"]
+                            S4["Bloqueo de Seguridad\n(Previene Despacho Incompleto)"]
+                        end
+
+                        subgraph UltimaMilla ["🚚 Última Milla (Starken)"]
+                            U1["Ejecución de Reglas Especiales\n(Actas, TV, Privacidad)"]
+                            U2((Entrega\nExitosa))
+                        end
+
+                        O2 --> S1
+                        S1 --> S2
+                        
+                        S2 -->|Sí| S3
+                        S3 --> O3
+                        S3 --> R1
+                        
+                        S2 -->|No| S4
+                        S4 --> O4
+                        
+                        O3 --> U1
+                        U1 --> U2
+                        U1 -.->|Reporte Cumplimiento| R2
+
+                        classDef inicio fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                        classDef fin fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                        classDef decision fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#fff;
+                        classDef rule fill:#F1F5F9,stroke:#3B82F6,stroke-width:2px;
+                        classDef ops fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                        
+                        class O1 inicio;
+                        class U2 fin;
+                        class S2 decision;
+                        class S1,S3,S4 rule;
+                        class O2,O3,O4,R1,R2,U1 ops;
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; background-color: white; padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                <h3 style="margin-top: 0;">📖 Lectura de Negocio (Modo Autónomo)</h3>
+                <p>Este flujo ilustra la cadena de valor de la solución sin entrar en detalles de sistemas ni bases de datos. Comienza en la <strong>bodega in-house</strong>, donde el escaneo físico desencadena una verificación de integridad blindada por Starken. La regla de oro es clara: <strong>cero intervención manual en la emisión</strong>. Si el pedido está completo, se emite automáticamente la etiqueta, consolidando un despacho limpio que no acumula carga huérfana en bodega y gatillando la visibilidad del CUD para Ripley. Si falta un bulto, el sistema activa un bloqueo de seguridad preventivo que aísla la carga en el rezago. Finalmente, el proceso conecta directamente con la <strong>Última Milla</strong>, donde se ejecutan las estrictas políticas de marca dictadas por Ripley, cerrando el ciclo logístico con una entrega controlada.</p>
+            </div>
+        </div>
+
+        <!-- TAB 3: FLUJO TÉCNICO -->
+        <div id="tab3" class="tab-content">
+            
+            <h2 style="color: var(--primary); margin-top: 0;">Flujo Técnico Detallado (Arquitectura y Sistemas)</h2>
+            <p style="margin-bottom: 1rem;">Perspectiva de sistemas: orquestación de bases de datos, APIs y lógica de validación.</p>
+            <div class="mermaid-container" style="margin-top: 1rem;">
+                <div class="mermaid">
+                    graph LR
+                        subgraph RipleyAPI ["Capa Cliente (API Ripley)"]
+                            R1["API ListOrder"]
+                        end
+                        
+                        subgraph AppInHouse ["Capa Frontend (App In-House)"]
+                            A1((Inicio)) --> A2["Módulo Hermanado"]
+                            A2 --> A3["Pinchar Cartón"]
+                            A4["Impresión Etiqueta (Bluetooth)"]
+                            A5["Alerta: Pedido Incompleto / Soporte"]
+                            A6((Fin))
+                        end
+
+                        subgraph Orquestador ["Capa Core (Orquestador STK)"]
+                            O1["Consulta Detalle Cartón"]
+                            O3{"¿Pedido Completo?"}
+                            O4["Detecta Creación OF y Solicita Etiqueta"]
+                            O5["Cierra Pallet de Gestión"]
+                            O6["Asigna a Pallet de Rezago del Día"]
+                        end
+
+                        subgraph BDOracle ["Capa Datos (BD Oracle)"]
+                            B1[("Datos Despacho /
+                            Hermanado")]
+                            B3[("Registro de
+                            Error / Rezago")]
+                        end
+
+                        A3 --> O1
+                        O1 <-->|Fetch Data| R1
+                        O1 --> B1
+                        
+                        B1 --> O3
+                        
+                        O3 -->|Sí| O4
+                        O4 --> A4
+                        A4 --> A6
+                        
+                        O3 -->|No| O5
+                        O5 --> O6
+                        O6 --> B3
+                        B3 --> A5
+                        A5 --> A6
+
+                        classDef inicio fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                        classDef fin fill:#EF4444,stroke:#B91C1C,stroke-width:2px,color:#fff;
+                        classDef decision fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#fff;
+                        classDef backend fill:#F1F5F9,stroke:#3B82F6,stroke-width:2px;
+                        classDef frontend fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                        classDef db fill:#F1F5F9,stroke:#3B82F6,stroke-width:2px;
+                        
+                        class A1 inicio;
+                        class A6 fin;
+                        class O3 decision;
+                        class O1,O4,O5,O6 backend;
+                        class B1,B3 db;
+                        class A2,A3,A4,A5,R1 frontend;
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; background-color: white; padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                <h3 style="margin-top: 0;">📖 Lectura Técnica y Arquitectónica (Modo Autónomo)</h3>
+                <p><strong>El flujo técnico</strong> sustenta la operación orquestando consultas en tiempo real a la API <code>ListOrder</code> de Ripley. El nodo decisional crítico reside en la evaluación de la completitud en la BD Oracle de STK. Todo bulto unitario que no satisfaga la condición es empujado sistémicamente a un pallet de rezago (BD), blindando a Facturación de Órdenes de Flete incompletas.</p>
+            </div>
+        </div>
+
+        <!-- TAB 4: IMPACTO -->
+        <div id="tab4" class="tab-content">
+            <div class="grid">
+                <div class="card card-pro">
+                    <h3>👍 Beneficios y Valor al Negocio</h3>
+                    <ul>
+                        <li><strong>Sanidad Financiera Inmediata:</strong> Al nacer todas las órdenes de flete completas y validadas, se erradican las fugas financieras y la consolidación manual en el equipo de Facturación.</li>
+                        <li><strong>Trazabilidad PUSH Limpia:</strong> La llave primaria CUD asegura el seguimiento sin orfandad de bultos hacia la API de Ripley, transparentando la operación.</li>
+                        <li><strong>Eficiencia Operativa Local y Cero Acumulación:</strong> Reducción directa del error humano y de los tiempos de caminata. Además, el control de pallets evita el atochamiento y la acumulación desordenada de bultos sueltos en el In-House.</li>
+                        <li><strong>Aseguramiento de Última Milla:</strong> Implementación sistémica de bloqueos de evidencia (sin fotos de carnet) y reglas de entrega (actas de no apertura), evitando penalizaciones por parte de Ripley.</li>
+                    </ul>
+                </div>
+
+                <div class="card card-con">
+                    <h3>⚠️ Riesgos y Obligaciones Técnicas</h3>
+                    <ul>
+                        <li><strong>Transformación Volumétrica:</strong> Ripley transmite la información en metros cúbicos (M3), sin embargo, Starken debe transformarlo en sus sistemas internos a peso volumétrico. Starken asume la carga de esta transformación, no el cliente.</li>
+                        <li><strong>Excepciones Físicas:</strong> Si una caja se extravía físicamente, el sistema bloqueará la emisión de ese pedido. El equipo In-House requerirá una capacitación precisa para gestionar la liberación forzada documentada (excepciones).</li>
+                        <li><strong>Sincronía de Hardware:</strong> El nuevo proceso recae sobre la estabilidad y conectividad de los teléfonos y las impresoras Bluetooth de la operación in-house.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

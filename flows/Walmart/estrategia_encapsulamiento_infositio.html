@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estrategia Arquitectónica: Encapsular a Infositio</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #0F172A;
+            --secondary: #3b82f6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 { color: var(--primary); margin: 0; }
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .mermaid {
+            width: 100%;
+        }
+        
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 1100px !important;
+            height: auto !important;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .card h3 { margin-top: 0; }
+        .card-todo { background-color: #f1f5f9; border-left: 4px solid var(--primary); }
+        .card-pro { background-color: #f0fdf4; border-left: 4px solid var(--success); }
+        .card-con { background-color: #fef2f2; border-left: 4px solid var(--danger); }
+        
+        ul { padding-left: 1.2rem; }
+        li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Estrategia: Rebajar a Infositio de "Traductor" a "Músculo Operativo"</h1>
+            <p>Mapa de ruta para recuperar la Soberanía de Datos. Starken asume el rol de Gateway Comercial, encapsulando a Infositio exclusivamente en labores de Primera Milla (PM) y Última Milla (UM).</p>
+        </div>
+
+        <h2 style="color: var(--primary);">1. El Salto Arquitectónico (AS-IS vs TO-BE)</h2>
+        <div class="mermaid-container">
+            <div class="mermaid">
+                %%{init: {'theme': 'base', 'themeVariables': { 'fontSize': '16px'}}}%%
+                graph TD
+                    subgraph ASIS ["❌ AS-IS (Infositio lidera la Integración)"]
+                        direction TB
+                        W1[Walmart / Clientes] -->|Envía JSON custom| I1[Infositio / Planitrack<br/>Middleware + TMS]
+                        I1 -->|1. Traduce a formato Starken<br/>2. Aplica reglas y bloqueos<br/>3. Avisa al cliente| S1[Starken Core<br/>Receptor Ciego]
+                    end
+
+                    subgraph TOBE ["✅ TO-BE (Starken lidera, Infositio ejecuta PM/UM)"]
+                        direction TB
+                        W2[Clientes DispatchTrack<br/>Walmart, Easy, Hites] -->|Webhooks Nativos| GW[Gateway Starken In-House<br/>API Translator + Bifurcación]
+                        GW -->|Notificaciones| W2
+                        GW -->|Data Limpia| S2[Starken Core<br/>Planificador Central]
+                        S2 -->|Archivo Estándar| I2[Infositio<br/>Músculo Operativo: PM y UM]
+                    end
+                    
+                    classDef bad fill:#fee2e2,stroke:#ef4444;
+                    classDef good fill:#dcfce7,stroke:#10b981;
+                    classDef stark fill:#e0f2fe,stroke:#0284c7;
+                    classDef info fill:#fef3c7,stroke:#d97706;
+                    
+                    class ASIS bad;
+                    class TOBE good;
+                    class GW,S1,S2 stark;
+                    class I1,I2 info;
+            </div>
+        </div>
+
+        <h2 style="color: var(--primary);">2. ¿Qué conlleva hacer este cambio? (Las tareas de TI)</h2>
+        <div class="card card-todo" style="margin-bottom: 2rem;">
+            <h3>Lo que TI Starken debe desarrollar (Inversión CapEx)</h3>
+            <p>Para poder arrinconar a Infositio, nosotros debemos asumir el trabajo que ellos hacían. Esto exige 4 pilares de desarrollo interno:</p>
+            <ul>
+                <li><strong>1. Construir el API Gateway DispatchTrack:</strong> Levantar un <i>endpoint</i> público que sepa recibir el formato estándar global de DispatchTrack en su idioma original.</li>
+                <li><strong>2. Motor de Reglas de Negocio:</strong> Internalizar la "Lógica de Bifurcación" (atajar órdenes repetidas, consultar a la Base de Datos si el camión ya salió, y anular/crear en Starken).</li>
+                <li><strong>3. Sistema Emisor de Webhooks:</strong> Construir el módulo que informe de vuelta a Walmart/Easy/Hites cuando el estado del paquete cambie (Entregado, Fallido, etc.).</li>
+                <li><strong>4. Estandarización hacia Infositio:</strong> Asegurar que nuestro sistema le envíe a Planitrack una estructura rígida e inmutable, sin importar de qué cliente venga la caja.</li>
+            </ul>
+        </div>
+
+        <div class="grid">
+            <div class="card card-pro">
+                <h3 style="color: #065F46;">👍 Pros (El Retorno de Inversión)</h3>
+                <ul>
+                    <li><strong>Onboarding Costo Cero:</strong> Al tener el Gateway listo para DispatchTrack, sumar a Easy, Hites o Arrimaq es un proceso de configuración, no de programación. Cero costo de proveedor.</li>
+                    <li><strong>Soberanía Comercial:</strong> Starken es dueño de la relación tecnológica con los grandes clientes. Si hay fallas, Starken ve los logs; si el cliente quiere cambios, Starken cobra o lo asume, sin rogar a terceros.</li>
+                    <li><strong>Agresividad en Ventas:</strong> Comercial puede salir a vender el servicio prometiendo "Integración Nativa con DispatchTrack", un argumento demoledor frente a la competencia.</li>
+                    <li><strong>Infositio Comoditizado:</strong> Si Infositio sube los precios o falla, Starken puede desenchufarlos y conectar otro TMS de PM/UM (ej. SimpliRoute o Beetrack) sin que Walmart ni Easy se enteren ni sufran impacto técnico.</li>
+                </ul>
+            </div>
+
+            <div class="card card-con">
+                <h3 style="color: #991B1B;">👎 Contras y Riesgos (Lo que duele)</h3>
+                <ul>
+                    <li><strong>Golpe Brutal a la Capacidad TI:</strong> Requiere dedicar células completas de arquitectura y desarrollo durante varios <i>sprints</i>, retrasando otros proyectos del BAU o del Portafolio corporativo.</li>
+                    <li><strong>Absorción de Soporte Nivel 2/3:</strong> Las caídas de webhook, intermitencias y errores de formato ya no son culpa de Infositio. TI Starken asume la guardia 24/7 y la respuesta a los tickets de Walmart.</li>
+                    <li><strong>Inversión Inicial Alta:</strong> Se cambia un gasto transaccional barato (14 HH a Infositio) por una inversión estructural cara (sueldos de ingenieros y consumo de nube).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

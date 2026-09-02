@@ -1,0 +1,73 @@
+{
+    "Hites": [
+        {
+            "name": "Resumen Pedida",
+            "url": "flows/Hites/01_Resumen_Pedida_Hites.html"
+        }
+    ],
+    "Ripley - Trazabilidad por CUD y Discrepancia facturacion": [
+        {
+            "name": "Demo Hermanado",
+            "url": "flows/Ripley/demo_ripley_hermanado.html"
+        },
+        {
+            "name": "Propuesta Solución",
+            "url": "flows/Ripley/propuesta_de_solucion_ripley.html"
+        }
+    ],
+    "Homologacion de estado Retail": [
+        {
+            "name": "Flujo Integración",
+            "url": "flows/Falabella/Flujo_Integracion_Falabella.html"
+        }
+    ],
+    "Electrolux - Re tarificar Seller - Detección automática de bultos.": [
+        {
+            "name": "Discovery Bultos",
+            "url": "flows/Electrolux/discovery_electrolux_bultos.html"
+        },
+        {
+            "name": "Traspaso Info AS-IS",
+            "url": "flows/Electrolux/traspaso_informacion_electrolux_AS_IS.html"
+        },
+        {
+            "name": "Discovery Outlets",
+            "url": "flows/Electrolux/discovery_electrolux_outlets.html"
+        },
+        {
+            "name": "Flujo AS-IS VTEX",
+            "url": "flows/Electrolux/Flujo AS-IS Integracion VTEX.html"
+        },
+        {
+            "name": "Traspaso Info",
+            "url": "flows/Electrolux/traspaso_informacion_electrolux.html"
+        }
+    ],
+    "Walmart LI - Reagendamientos": [
+        {
+            "name": "Flujo Reagendamiento",
+            "url": "flows/Walmart/flujo_diario_reagendamiento.html"
+        },
+        {
+            "name": "Estrategia Infositio",
+            "url": "flows/Walmart/estrategia_encapsulamiento_infositio.html"
+        },
+        {
+            "name": "Flujo Saltarse Infositio",
+            "url": "flows/Walmart/flujo_saltarse_infositio.html"
+        },
+        {
+            "name": "Blueprint LI",
+            "url": "flows/Walmart/blueprint_logistica_inversa.html"
+        },
+        {
+            "name": "Comparativa Caminos",
+            "url": "flows/Walmart/comparativa_caminos_walmart.html"
+        },
+        {
+            "name": "Discovery Integración",
+            "url": "flows/Walmart/discovery_integracion_walmart.html"
+        }
+    ],
+    "Conductor Regular": []
+}

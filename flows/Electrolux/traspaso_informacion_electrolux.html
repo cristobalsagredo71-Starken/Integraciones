@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handoffs: Integración VTEX - Electrolux</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge-tobe {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #3b82f6;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Tabs Styles */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .tab-button.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        .tab-button:hover:not(.active) {
+            background: #e2e8f0;
+        }
+        .tab-content {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .tab-content.active {
+            position: relative;
+            left: auto;
+            opacity: 1;
+            pointer-events: auto;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        .description-box {
+            background-color: #f1f5f9;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: #f8fafc;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Diagramas de Handoffs (Traspaso de Responsabilidad)</h1>
+            <span class="badge-tobe">FLUJO DE DATOS Y RESPONSABILIDAD (TO-BE)</span>
+        </div>
+
+        <p>Estos <strong>Diagramas de Secuencia</strong> muestran exactamente "quién tiene la pelota" en cada milisegundo de la transacción para cada pedida técnica. Las cajas grises verticales (activaciones) indican visualmente quién está trabajando y quién está inactivo.</p>
+        <p>En ambos casos queda demostrado que <strong>VTEX es un actor pasivo</strong>: solo avisa y entrega datos. La carga pesada (el "Cerebro" lógico) recae 100% sobre el Middleware de Starken.</p>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('bultos', this)">Pedida 1: Matriz de Bultos</button>
+            <button class="tab-button" onclick="openTab('sellers', this)">Pedida 2: Origen de Outlets (Sellers)</button>
+        </div>
+
+        <!-- TAB 1: BULTOS -->
+        <div id="bultos" class="tab-content active">
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        actor C as Cliente Final
+                        participant V as VTEX (Electrolux)
+                        participant M as Middleware (Starken)
+                        participant S as Core (Starken)
+
+                        C->>V: Paga Carrito de Compras
+                        
+                        activate V
+                        Note over V: La pelota la tiene Electrolux
+                        V->>V: Cambia estado a "Invoiced"
+                        V->>M: Webhook Aviso ("Hay orden nueva")
+                        deactivate V
+                        
+                        activate M
+                        Note over M: La pelota pasa a Starken (Salud = 0)
+                        M->>M: Worker Asíncrono encola la orden
+                        
+                        M->>V: GET /getOrder (Petición de datos profundos)
+                        activate V
+                        V-->>M: Responde JSON (con SKUs y pesos)
+                        deactivate V
+                        
+                        Note over M: CEREBRO TO-BE (Matriz de Bultos)
+                        M->>M: Lee los SKUs del JSON
+                        M->>M: Cruza los SKUs contra la Tabla Maestra Interna
+                        M->>M: Predice si es Monobulto o Multibulto
+                        
+                        M->>S: Inyecta Datos con N° Bultos Exactos
+                        activate S
+                        Note over S: La pelota pasa al Core
+                        S->>S: Crea Orden de Flete (OF)
+                        S-->>M: Retorna OF creada y N° Seguimiento
+                        deactivate S
+                        
+                        M->>M: Estado de éxito (Salud = 1)
+                        
+                        M->>V: (Opcional) Notifica N° Seguimiento al e-commerce
+                        deactivate M
+                </div>
+            </div>
+            <div class="description-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Análisis de Responsabilidad: Bultos</h3>
+                <p>Para automatizar la partición de bultos, no se le pide ningún desarrollo a Electrolux. Ellos simplemente exponen el JSON de la compra (como siempre lo han hecho). Starken es quien debe desarrollar la Tabla Maestra y la lógica de cruce dentro de su propio Middleware.</p>
+            </div>
+        </div>
+
+        <!-- TAB 2: SELLERS -->
+        <div id="sellers" class="tab-content">
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    sequenceDiagram
+                        autonumber
+                        actor C as Cliente Final
+                        participant V as VTEX (Electrolux)
+                        participant M as Middleware (Starken)
+                        participant S as Core (Starken)
+
+                        C->>V: Compra producto con stock de Outlet Regional
+                        
+                        activate V
+                        Note over V: La pelota la tiene Electrolux
+                        V->>V: Cambia estado a "Invoiced"
+                        V->>M: Webhook Aviso ("Hay orden nueva")
+                        deactivate V
+                        
+                        activate M
+                        Note over M: La pelota pasa a Starken (Salud = 0)
+                        M->>M: Worker Asíncrono encola la orden
+                        
+                        M->>V: GET /getOrder (Petición de datos profundos)
+                        activate V
+                        V-->>M: Responde JSON (con campo seller_id)
+                        deactivate V
+                        
+                        Note over M: CEREBRO TO-BE (Ruteo Geográfico)
+                        M->>M: Identifica campo "seller_id" en la respuesta
+                        M->>M: Homologa seller_id con un Origen Físico (Ej: Antofagasta)
+                        
+                        M->>S: Inyecta Datos con el Origen Dinámico Alterado
+                        activate S
+                        Note over S: La pelota pasa al Core
+                        S->>S: Crea Orden de Flete con tarifa regional correcta
+                        S-->>M: Retorna OF creada
+                        deactivate S
+                        
+                        M->>M: Gatilla Inyección de Solicitud de Retiro a sucursal local
+                        M->>M: Estado de éxito (Salud = 1)
+                        deactivate M
+                </div>
+            </div>
+            <div class="description-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Análisis de Responsabilidad: Sellers / Outlets</h3>
+                <p>Al igual que con los bultos, el motor de VTEX (Electrolux) solo se limita a entregar el dato de quién es el Seller del producto. El Middleware de Starken es quien tiene la enorme responsabilidad de detectar ese Seller, re-escribir el Origen de la orden para que el tarifador de Starken Core no cobre desde Santiago, y además, gatillar un aviso físico a la flota local para el retiro.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Lógica de Tabs
+        function openTab(tabName, buttonElement) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            buttonElement.classList.add("active");
+        }
+        
+        // Inicializar Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

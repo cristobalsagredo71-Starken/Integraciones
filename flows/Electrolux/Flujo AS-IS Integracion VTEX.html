@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS-IS: Integración VTEX - Electrolux</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge-as-is {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #f59e0b;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* Tabs Styles */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .tab-button.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        .tab-button:hover:not(.active) {
+            background: #e2e8f0;
+        }
+        .tab-content {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .tab-content.active {
+            position: relative;
+            left: auto;
+            opacity: 1;
+            pointer-events: auto;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        /* Forzar al SVG de Mermaid a usar el ancho disponible y no miniaturizarse */
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        .description-box {
+            background-color: #f1f5f9;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: #f8fafc;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Flujo Operativo AS-IS: Integración VTEX - Electrolux</h1>
+            <span class="badge-as-is">ESTADO ACTUAL (MÚLTIPLES CUELLOS DE BOTELLA)</span>
+        </div>
+
+        <p>Este documento expone la realidad actual (AS-IS) de la operación, destacando los dos grandes dolores comerciales: la interrupción de la automatización para digitar bultos a mano, y el error de facturación / logística ciega en los Outlets de región.</p>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('negocio', this)">Flujo de Negocio (Alto Nivel)</button>
+            <button class="tab-button" onclick="openTab('tecnico', this)">Flujo Técnico (Backend Starken)</button>
+        </div>
+
+        <!-- TAB 1: NEGOCIO -->
+        <div id="negocio" class="tab-content active">
+            <p><strong>Vista Ejecutiva:</strong> Este diagrama ilustra el flujo de negocio puro, omitiendo la infraestructura de base de datos. Muestra exactamente dónde están los sobrecostos y las pérdidas de tiempo en la actualidad.</p>
+            
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    graph TD
+                        subgraph Fase_1 ["Fase 1: Emisión y Generación de OF"]
+                            A([Venta Electrolux en VTEX]) --> B{"¿Es Monobulto o Multibulto?"}
+                            
+                            B -- "Monobulto" --> D["Generación Automática de OF"]
+                            B -- "Multibulto" --> C["💥 FALLA 1: QUIEBRE DE AUTOMATIZACIÓN<br/>La integración se detiene. El equipo de Electrolux debe entrar a<br/>Starken Pro para digitar manualmente la cantidad de bultos."]
+                            C --> D
+                        end
+
+                        subgraph Fase_2 ["Fase 2: Tarificación Comercial"]
+                            D --> E{"¿Desde dónde se despacha la carga?"}
+                            E -- "Desde Santiago" --> F["Cálculo correcto"]
+                            E -- "Desde Outlet Regional" --> G["💥 FALLA 2: COBRO ERRÓNEO<br/>El sistema centralizado asume por defecto que sale de Santiago.<br/>Se genera una tarifa incorrecta (descuadre financiero)."]
+                        end
+                        
+                        subgraph Fase_3 ["Fase 3: Operación en Terreno (Retiros)"]
+                            F --> H{"¿Cómo se entera el camión<br/>que debe ir al Outlet?"}
+                            G --> H
+                            
+                            H -- "Vía Correo / Agenda Fija" --> I["💥 FALLA 3: LOGÍSTICA CIEGA<br/>No hay inyección digital. Para evitar mandar correos diarios a SAC Starken,<br/>se fijan rutas diarias (ej: ir siempre a las 16:00 hrs)."]
+                            
+                            I --> J{"¿Hubo ventas físicas ese día?"}
+                            J -- "Sí" --> K([Retiro Exitoso])
+                            J -- "No" --> L(["💥 FALLA 4: FALSO FLETE<br/>Viaje Muerto. El camión gasta combustible y tiempo<br/>yendo a un Outlet que no tenía despachos."])
+                        end
+
+                        classDef inicio fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                        classDef falla fill:#FEF2F2,stroke:#DC2626,stroke-width:3px,color:#991B1B,font-weight:bold;
+                        classDef neutral fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                        classDef decision fill:#EFF6FF,stroke:#3B82F6,stroke-width:2px;
+                        
+                        class A,K inicio;
+                        class C,G,I,L falla;
+                        class B,E,H,J decision;
+                        class D,F neutral;
+                </div>
+            </div>
+            
+            <div class="description-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Resumen de Puntos de Falla (El Costo del AS-IS)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Punto de Falla</th>
+                            <th>Impacto Operativo y Comercial</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Intervención Humana (Bultos)</strong></td>
+                            <td>Al requerir que un operador de Electrolux digite bultos en Starken Pro para órdenes Multibulto, se pierde la velocidad de la integración web, arriesgando la pérdida de SLA de despacho.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Tarificación Errónea (Origen)</strong></td>
+                            <td>Al arrastrar la cuenta centralizada de Santiago, todos los fletes de regiones se calculan mal, generando descuadres financieros (cobros de menos o de más).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Viajes Muertos (Retiros)</strong></td>
+                            <td>Al no existir inyección automatizada, Electrolux coordina por correo con SAC Starken. Para no enviar correos todos los días, fijan "Rutas Ciegas" (ej: todos los días a las 16h), lo que genera "Falsos Fletes" los días que el Outlet no vende.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: TÉCNICO -->
+        <div id="tecnico" class="tab-content">
+            <p><strong>Vista Arquitectónica:</strong> Diagrama de Carriles (Swimlane) detallado con la arquitectura interna actual de Starken, colas asíncronas y estados de base de datos.</p>
+            
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    graph LR
+                        subgraph Electrolux ["Capa Cliente (Operador / VTEX)"]
+                            direction LR
+                            V1([Inicio]) --> V2["VTEX: Pedido Facturado (status=invoiced)"]
+                            V2 --> V3["Envía Webhook"]
+                            
+                            P1["Operador Electrolux entra a Starken Pro"]
+                            P2["Digita cantidad de bultos manualmente"]
+                            P1 --> P2
+                            
+                            O1["Operador Electrolux envía correos a SAC Starken"]
+                        end
+
+                        subgraph Starken ["Capa de Procesamiento (Backend Starken)"]
+                            direction LR
+                            S1[("Tabla Emisión: Guarda Orden (Salud = 0)")]
+                            S2["Worker Asíncrono: Cambia a Salud = 4"]
+                            S3["GET /getOrder a VTEX"]
+                            S4{"¿Es Monobulto?"}
+                            
+                            S5["Asigna bultos automáticamente"]
+                            S6["Pausa Orden: Estado Pendiente"]
+                            
+                            S7["Actualiza Bultos y setea Salud = 0"]
+                            S8["Creación OF: Asume Origen Santiago"]
+                            
+                            S9{"¿OF Creada?"}
+                            S10["Salud = 1 (Éxito)"]
+                            S11["Salud = 2 (Fallo)"]
+                        end
+
+                        subgraph Terreno ["Capa Logística (Terreno)"]
+                            direction LR
+                            T1["Camión asiste por agenda ciega"]
+                            T2{"¿Hay mercadería?"}
+                            T3["Retira Bultos"]
+                            T4["Falso Flete / Viaje Muerto"]
+                            T5([Fin])
+                        end
+
+                        V3 --> S1
+                        S1 --> S2
+                        S2 --> S3
+                        S3 --> S4
+                        
+                        S4 -- "Sí" --> S5
+                        S5 --> S8
+                        
+                        S4 -- "No (Multibulto)" --> S6
+                        S6 -. "Obliga carga manual" .-> P1
+                        P2 --> S7
+                        S7 -->|Re-encola| S2
+                        
+                        S8 -. "Dolor Facturación" .-> S9
+                        S9 -- "Sí" --> S10
+                        S9 -- "No" --> S11
+                        
+                        O1 -. "Agenda Fija Ineficiente" .-> T1
+                        T1 --> T2
+                        T2 -- "Sí" --> T3
+                        T2 -- "No" --> T4
+                        T3 --> T5
+                        T4 --> T5
+
+                        classDef inicio fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                        classDef fin fill:#EF4444,stroke:#B91C1C,stroke-width:2px,color:#fff;
+                        classDef decision fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#fff;
+                        classDef backend fill:#F1F5F9,stroke:#3B82F6,stroke-width:2px;
+                        classDef frontend fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                        classDef terreno fill:#FEF3C7,stroke:#D97706,stroke-width:2px;
+                        
+                        class V1 inicio;
+                        class T5 fin;
+                        class S4,S9,T2 decision;
+                        class S1,S2,S3,S5,S6,S7,S8,S10,S11 backend;
+                        class V2,V3,P1,P2,O1 frontend;
+                        class T1,T3,T4 terreno;
+                </div>
+            </div>
+
+            <div class="description-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Diccionario de Estados de "Salud" (Backend)</h3>
+                <p>El motor asíncrono de Starken utiliza este campo para transicionar los estados de la base de datos:</p>
+                <ul>
+                    <li><strong>Salud 0:</strong> Pedido listo para ser atrapado por el motor (recién llegado por Webhook o re-encolado por humano).</li>
+                    <li><strong>Salud 4:</strong> Pedido en procesamiento activo (el Worker lo está trabajando).</li>
+                    <li><strong>Salud 1:</strong> Éxito. Orden de Flete (OF) creada en el Core.</li>
+                    <li><strong>Salud 2:</strong> Error. La creación falló y queda pendiente en bitácora.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de Tabs
+        function openTab(tabName, buttonElement) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            buttonElement.classList.add("active");
+        }
+        
+        // Inicializar Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

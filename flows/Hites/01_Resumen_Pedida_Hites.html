@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Requerimientos - Integración Hites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .starken-red { color: #E3000F; }
+        .bg-starken-red { background-color: #E3000F; }
+        .starken-gray { color: #4A4A4A; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+        <!-- Header -->
+        <div class="bg-starken-red text-white p-6 border-b-4 border-black">
+            <h1 class="text-3xl font-bold uppercase tracking-wide">Desbloqueo Integración Hites + DispatchTrack</h1>
+            <p class="text-sm mt-2 opacity-90">Resumen Ejecutivo para alineamiento interno (TI y Comercial)</p>
+        </div>
+
+        <!-- Intro -->
+        <div class="p-6 bg-gray-100 border-b border-gray-200">
+            <p class="text-lg"><strong>Contexto:</strong> La conversación técnica con Hites se encuentra bloqueada. Hites requiere <strong>4 definiciones técnicas y comerciales</strong> por parte de Starken para poder avanzar con la configuración en su TMS (DispatchTrack). Se requiere postura unificada entre TI (José Mandique) y KAM (Roberto Gallardo).</p>
+        </div>
+
+        <!-- The 4 Points -->
+        <div class="p-6 space-y-6">
+            
+            <!-- Point 1 -->
+            <div class="border-l-4 border-red-500 pl-4">
+                <h2 class="text-xl font-bold text-gray-900">1. Arquitectura de Integración (El Desarrollo)</h2>
+                <p class="mt-2 text-gray-700"><strong>El dilema:</strong> Definir quién asume el esfuerzo de desarrollo para la creación de la Orden de Flete (OF).</p>
+                <ul class="list-disc ml-5 mt-2 text-gray-600">
+                    <li><strong>Opción A:</strong> Obligamos a Hites a consumir nuestra API (desarrollan ellos).</li>
+                    <li><strong>Opción B (Webhook):</strong> Nosotros construimos una conexión que "escuche" a DispatchTrack. Hites asigna un camión en su sistema, y eso gatilla la creación de la OF en Starken (desarrollamos nosotros).</li>
+                </ul>
+                <p class="mt-2 text-sm bg-yellow-100 p-2 rounded text-yellow-800 border border-yellow-200"><strong>Decisión Estratégica:</strong> ¿Aprobaremos desarrollar la Opción B para capitalizarlo como un "Conector Nativo DispatchTrack" que sirva mañana para Walmart y Easy?</p>
+            </div>
+
+            <!-- Point 2 -->
+            <div class="border-l-4 border-blue-500 pl-4">
+                <h2 class="text-xl font-bold text-gray-900">2. Cierre de Estados (Homologación)</h2>
+                <p class="mt-2 text-gray-700"><strong>El dilema:</strong> José (TI) logró homologar 23 estados de Starken hacia DispatchTrack.</p>
+                <ul class="list-disc ml-5 mt-2 text-gray-600">
+                    <li>DispatchTrack maneja más estados, pero Hites necesita saber si esos 23 estados de Starken son <strong>absolutamente todos</strong> los que Starken utiliza en su operación.</li>
+                    <li>Hites necesita cerrar esta lista para configurar su sistema y evitar que mañana les enviemos un estado no mapeado que rompa su flujo.</li>
+                </ul>
+                <p class="mt-2 text-sm bg-blue-50 p-2 rounded text-blue-800 border border-blue-200"><strong>Decisión:</strong> TI debe confirmar con un Sí/No categórico si el universo de estados de Starken se cierra en esos 23 (o si debemos sumar más).</p>
+            </div>
+
+            <!-- Point 3 -->
+            <div class="border-l-4 border-green-500 pl-4">
+                <h2 class="text-xl font-bold text-gray-900">3. Timing de la OF (Orden de Flete)</h2>
+                <p class="mt-2 text-gray-700"><strong>El dilema:</strong> El momento exacto en que le enviamos el número de seguimiento a Hites.</p>
+                <ul class="list-disc ml-5 mt-2 text-gray-600">
+                    <li>Hites exige recibir la OF en el milisegundo en que <strong>se crea</strong>.</li>
+                    <li>Starken (TI) propuso enviarla recién cuando la carga se <strong>retira en bodega</strong> (en tránsito).</li>
+                </ul>
+                <p class="mt-2 text-sm bg-green-50 p-2 rounded text-green-800 border border-green-200"><strong>Decisión:</strong> Definir si Starken puede ceder y ajustar sus sistemas para enviar la OF en la creación, o si mantendremos la regla inamovible del retiro en bodega.</p>
+            </div>
+
+            <!-- Point 4 -->
+            <div class="border-l-4 border-purple-500 pl-4">
+                <h2 class="text-xl font-bold text-gray-900">4. Volumen de Evidencias (Fotos PoD)</h2>
+                <p class="mt-2 text-gray-700"><strong>El dilema:</strong> La cantidad de fotos que Starken envía como prueba de entrega.</p>
+                <ul class="list-disc ml-5 mt-2 text-gray-600">
+                    <li>Hites quiere recibir <strong>todas</strong> las fotos que tome el transportista (agrupadas en un arreglo de URLs separadas por comas).</li>
+                </ul>
+                <p class="mt-2 text-sm bg-purple-50 p-2 rounded text-purple-800 border border-purple-200"><strong>Decisión:</strong> TI debe confirmar factibilidad técnica: ¿Nuestra plataforma soporta enviar el paquete completo de fotos o estamos limitados a enviar solo una?</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-100 p-4 text-center text-sm text-gray-500 border-t border-gray-200">
+            Generado por PMO — Documento de Alineamiento Interno
+        </div>
+    </div>
+</body>
+</html>

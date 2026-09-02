@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Blueprint: Logística Inversa Walmart</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #3b82f6;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        .description-box {
+            background-color: #f1f5f9;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Service Blueprint: Logística Inversa (Walmart)</h1>
+            <span class="badge">CONDICIONES DE RETIRO Y LÍMITES DE RESPONSABILIDAD</span>
+        </div>
+
+        <p>Este Blueprint operativo (diagrama de servicios) estructura el viaje completo de una devolución, delimitando las obligaciones físicas de Starken frente al cliente final y Walmart.</p>
+
+        <div class="mermaid-container">
+            <div class="mermaid">
+                graph LR
+                    subgraph Cliente ["1. Cliente Final (Customer Journey)"]
+                        C1([Inicia reclamo en Walmart]) --> C2["Empaqueta y sella el producto"]
+                        C2 --> C3["Entrega caja al transportista"]
+                    end
+
+                    subgraph FrontStage ["2. Plataforma Walmart (Front-Stage)"]
+                        W1["Aprueba devolución"] --> W2["Dispara evento API a Starken"]
+                        C1 -.-> W1
+                    end
+
+                    subgraph Sistemas ["3. Sistemas TI (Support Process - Planitrack/Core)"]
+                        W2 --> S1["Middleware recibe evento"]
+                        S1 --> S2["Starken Core genera OF de Retiro"]
+                    end
+
+                    subgraph Logistica ["4. Operación Starken (Back-Stage Terreno)"]
+                        S2 --> T1["Camión llega a domicilio"]
+                        
+                        T1 -.-> C3
+                        
+                        C3 --> T2{"¿Embalaje Íntegro y Sellado?"}
+                        
+                        T2 -- "SÍ (Aprueba Visual)" --> T3["Firma Manifiesto"]
+                        T2 -- "NO (Caja Rota/Abierta)" --> T4["Rechaza retiro o deja observación"]
+                        
+                        T3 --> T5["Retorno de caja a dependencias del Seller"]
+                    end
+                    
+                    classDef cliente fill:#FDF4FF,stroke:#DB2777,stroke-width:2px;
+                    classDef walmart fill:#EFF6FF,stroke:#3B82F6,stroke-width:2px;
+                    classDef sistemas fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                    classDef logistica fill:#FEF3C7,stroke:#D97706,stroke-width:2px;
+                    classDef alerta fill:#FEE2E2,stroke:#DC2626,stroke-width:2px,font-weight:bold;
+                    classDef exito fill:#D1FAE5,stroke:#059669,stroke-width:2px;
+
+                    class C1,C2,C3 cliente;
+                    class W1,W2 walmart;
+                    class S1,S2 sistemas;
+                    class T1,T5 logistica;
+                    class T2 alerta;
+                    class T3 exito;
+            </div>
+        </div>
+
+        <div class="description-box">
+            <h3 style="margin-top: 0; color: var(--primary);">Condiciones Críticas del Retiro (Puntos Ciegos Protegidos)</h3>
+            <p>Para resguardar los intereses de Starken en terreno, el Blueprint establece los siguientes "Frenos de Mano" operativos, respaldados por el Anexo N°1 del contrato:</p>
+            <ul>
+                <li><strong>Prohibición de Control de Calidad (QA):</strong> El transportista de Starken <strong>NO</strong> abre cajas, <strong>NO</strong> revisa marcas/modelos, y <strong>NO</strong> enciende productos electrónicos. (Ref: Art 2.8).</li>
+                <li><strong>Inspección Visual Perimetral:</strong> La única obligación del chofer es verificar que el embalaje externo esté sellado, sin abolladuras graves y que el peso cuadre lógicamente con el manifiesto.</li>
+                <li><strong>Derecho a Rechazo:</strong> Si el cliente entrega un producto con embalaje insuficiente (ej: una TV envuelta en bolsas de basura), el chofer tiene la facultad contractual de rechazar el bulto en la puerta de la casa. (Ref: Art 2.7).</li>
+                <li><strong>Destino Final:</strong> La carga no se queda en centros de distribución de Starken; el viaje termina cuando se le devuelve físicamente la carga a la dependencia del <em>Seller</em> original.</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

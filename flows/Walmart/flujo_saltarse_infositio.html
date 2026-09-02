@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitectura In-House: Saltarse a Infositio</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        .cost-box {
+            background-color: #fef2f2;
+            padding: 1.5rem;
+            border-left: 4px solid var(--danger);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .cost-box h3 {
+            margin-top: 0;
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Arquitectura Alternativa: ¿Qué implica saltarse a Infositio?</h1>
+            <p>Este diagrama modela el "Escenario Ideal" mencionado por TI (donde "meten más manos"). Muestra cómo Starken tendría que absorber internamente todas las responsabilidades que hoy terceriza en el middleware.</p>
+        </div>
+
+        <div class="mermaid-container">
+            <div class="mermaid">
+                graph TD
+                    subgraph Walmart["1. Ecosistema Walmart (Sin Cambios)"]
+                        DT["DispatchTrack (TMS)"]
+                    end
+
+                    subgraph Starken["2. Ecosistema Starken (Absorbe Todo el Impacto)"]
+                        direction TB
+                        GW["NUEVO DESARROLLO TI STARKEN:<br/>API Gateway / Traductor DispatchTrack"]
+                        DB[("Base de Datos Core (Planificador)")]
+                        Core["API Estándar Logística Inversa<br/>(Post / Delete)"]
+                        
+                        GW -- "1. Recibe JSON nativo de Walmart<br/>y lo traduce a formato Starken" --> GW
+                        GW -- "2. Consulta si la OF ya existe" --> DB
+                        GW -- "3. Ejecuta Lógica de Bifurcación interna:<br/>Si existe -> Llama a DELETE<br/>Luego -> Llama a POST" --> Core
+                    end
+
+                    DT -- "Envía Webhook Directo" --> GW
+
+                    classDef walmart fill:#EFF6FF,stroke:#3B82F6,stroke-width:2px;
+                    classDef newDev fill:#FEF2F2,stroke:#EF4444,stroke-width:3px,stroke-dasharray: 5 5;
+                    classDef core fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                    
+                    class DT walmart;
+                    class GW newDev;
+                    class Core,DB core;
+            </div>
+        </div>
+
+        <div class="cost-box">
+            <h3>Los 4 Impactos Reales de tomar este camino (In-House)</h3>
+            <p>Eliminar a Infositio de la ecuación significa que <strong>Starken se convierte en su propio Infositio</strong>. Esto conlleva los siguientes costos ocultos:</p>
+            <ul>
+                <li><strong>1. Construir un Traductor de Idioma (API Gateway):</strong> Como DispatchTrack habla un JSON distinto a nuestra API estándar, TI de Starken tendría que desarrollar, habilitar y asegurar un <i>endpoint</i> exclusivo en nuestros servidores solo para recibir los mensajes de Walmart y traducirlos.</li>
+                <li><strong>2. Absorber la Lógica de Bifurcación:</strong> El trabajo de "atajar" la orden repetida, revisar que el camión no haya salido y aplicar el "lápiz para borrar" ya no lo hace un proveedor externo. Ahora hay que programarlo dentro de los sistemas transaccionales de Starken, tocando la arquitectura Core.</li>
+                <li><strong>3. Consumo de Backlog TI (Time-to-Market):</strong> Este desarrollo exige priorizar la iniciativa internamente. Requiere arquitectos, desarrolladores, pasar por entornos de QA (pruebas) y ventanas de paso a Producción. Lo que Infositio hace en pocos días por 14 HH, a Starken le tomaría semanas o meses de <i>sprints</i> internos.</li>
+                <li><strong>4. Costo de Mantenimiento Eterno:</strong> Si el día de mañana Walmart actualiza la versión de DispatchTrack o cambia un parámetro en su JSON, nosotros somos los responsables de destinar horas de soporte de nuestro equipo TI para arreglar el traductor, en vez de exigirle una solución al proveedor por SLA.</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

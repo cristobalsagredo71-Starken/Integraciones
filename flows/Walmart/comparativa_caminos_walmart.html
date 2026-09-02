@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Caminos: Integración DispatchTrack</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --path-a-color: #fef3c7;
+            --path-a-border: #d97706;
+            --path-b-color: #ecfdf5;
+            --path-b-border: #10b981;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            color: #1e293b;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .card-a {
+            border-top: 6px solid var(--path-a-border);
+        }
+        .card-b {
+            border-top: 6px solid var(--path-b-border);
+        }
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        ul {
+            padding-left: 1.5rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        .verdict {
+            margin-top: 3rem;
+            background: #1e293b;
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .highlight-a { color: var(--path-a-border); font-weight: bold; }
+        .highlight-b { color: var(--path-b-border); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Decisión Arquitectónica: Reagendamiento Walmart</h1>
+            <p>Evaluación de rutas de integración basadas en volumen comercial y capacidad TI.</p>
+        </div>
+
+        <div class="grid">
+            <!-- Camino A -->
+            <div class="card card-a">
+                <h2 style="color: var(--path-a-border);">Camino A: El Parche Táctico (Infositio)</h2>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                        graph TD
+                            W[Walmart<br/>30 OF/Mes] -->|DispatchTrack| I[Planitrack<br/>Middleware Externo]
+                            I -->|14 HH Cotizadas<br/>Traduce y Bifurca| S[API Starken Core]
+                            
+                            classDef walmart fill:#f1f5f9,stroke:#94a3b8;
+                            classDef external fill:#fef3c7,stroke:#d97706,stroke-width:2px;
+                            classDef core fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
+                            
+                            class W walmart;
+                            class I external;
+                            class S core;
+                    </div>
+                </div>
+                <h3>¿Qué conlleva este camino?</h3>
+                <ul>
+                    <li><strong>Caso de Negocio:</strong> Ideal para bajo volumen (30 pedidos aislados al mes).</li>
+                    <li><strong>Costo:</strong> Bajo. Pago único de 14 HH al proveedor externo.</li>
+                    <li><strong>Capacidad TI Starken:</strong> Cero impacto. No se desvía al equipo Core.</li>
+                    <li><strong>Time-to-Market:</strong> Inmediato (días).</li>
+                    <li><strong>Riesgo Técnico:</strong> <span style="color:#ef4444;">Vendor Lock-In</span>. Generamos dependencia de Infositio para cualquier cambio futuro o nuevo cliente.</li>
+                </ul>
+            </div>
+
+            <!-- Camino B -->
+            <div class="card card-b">
+                <h2 style="color: var(--path-b-border);">Camino B: La Apuesta Nativa (In-House)</h2>
+                <div class="mermaid-container">
+                    <div class="mermaid">
+                        graph TD
+                            W[Walmart] -->|DispatchTrack| GW[Gateway Starken<br/>Conector In-House]
+                            C1[Cliente B] -.->|DispatchTrack| GW
+                            C2[Cliente C] -.->|DispatchTrack| GW
+                            GW -->|API Translators + Lógica| S[API Starken Core]
+                            
+                            classDef clients fill:#f1f5f9,stroke:#94a3b8;
+                            classDef internal fill:#ecfdf5,stroke:#10b981,stroke-width:2px;
+                            classDef core fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
+                            
+                            class W,C1,C2 clients;
+                            class GW internal;
+                            class S core;
+                    </div>
+                </div>
+                <h3>¿Qué conlleva este camino?</h3>
+                <ul>
+                    <li><strong>Caso de Negocio:</strong> Exige un pipeline comercial robusto (múltiples clientes usando DispatchTrack) para justificar ROI.</li>
+                    <li><strong>Costo:</strong> Alto. Semanas/Meses de sueldos de ingenieros internos.</li>
+                    <li><strong>Capacidad TI Starken:</strong> Alto impacto. Obliga a priorizar esto en el Backlog sobre otros proyectos Core.</li>
+                    <li><strong>Time-to-Market:</strong> Lento (Sprints de desarrollo, QA, Paso a Prod).</li>
+                    <li><strong>Beneficio Estratégico:</strong> Activo reutilizable. Autonomía total, se elimina el peaje a terceros y permite Onboarding masivo gratis.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="verdict">
+            <h2>El Veredicto (La Regla del Volumen)</h2>
+            <p style="font-size: 1.1rem;">
+                Si el problema real se limita a <strong>30 pedidos al mes de Walmart</strong>, la <span class="highlight-a">Opción A (Infositio)</span> es la única decisión financiera y operativamente responsable (Evita sobreingeniería).<br><br>
+                Si Comercial levanta la mano y confirma que hay <strong>10.000 pedidos mensuales atrapados en 5 clientes que usan DispatchTrack</strong>, el caso se justifica y la <span class="highlight-b">Opción B (Nativa)</span> pasa a ser el proyecto prioritario del Portafolio.
+            </p>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

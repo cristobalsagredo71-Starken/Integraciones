@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo Operativo de Reagendamiento Walmart</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        .description-box {
+            background-color: #f1f5f9;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Diagrama Definitivo: El Rol de Infositio como "Atajador"</h1>
+            <p>Muestra cómo Walmart inyecta la carga repetida en el archivo masivo y qué ocurre si Infositio la filtra vs. si actúa como un tubo ciego.</p>
+        </div>
+
+        <div class="mermaid-container">
+            <div class="mermaid">
+                sequenceDiagram
+                    autonumber
+                    box rgb(239, 246, 255) Cliente
+                    participant DT as DispatchTrack<br/>(Walmart)
+                    end
+                    box rgb(248, 250, 252) Middleware
+                    participant PT as Planitrack<br/>(Infositio)
+                    end
+                    box rgb(254, 243, 199) Core
+                    participant S as API Starken<br/>(Logística Inversa)
+                    end
+
+                    Note over DT: Día 1: Cliente tenía retiro programado para el día 20<br/>Día 2: Cliente entra al portal y reagenda para el 22
+                    
+                    DT->>PT: Envía Archivo de Carga Masiva (Batch Diario)
+                    Note over DT, PT: Walmart empuja la MISMA OF (Mismo Cartón)<br/>pero ahora trae fecha 22 en vez de 20.
+                    
+                    rect rgb(234, 255, 234)
+                    Note over PT,S: ESCENARIO A: Infositio ATAJA la orden (El desarrollo de 14 HH)
+                    PT->>PT: Planitrack detecta: "Ojo, este cartón ya entró ayer"
+                    PT->>S: Consulta a Starken: ¿El camión de esta OF ya salió?
+                    
+                    alt Camión NO ha salido (Aún en bodega)
+                        S-->>PT: Seguro proceder
+                        PT->>S: 1. DELETE (Usa la goma y borra la OF del 20)
+                        PT->>S: 2. POST (Crea la nueva OF para el 22)
+                        Note over S: Todo fluye impecable. Cliente feliz.
+                    else Camión YA salió (Punto de No Retorno)
+                        S-->>PT: Peligro: Camión en ruta
+                        PT-->>DT: Rechazo: Ya es muy tarde para reagendar
+                    end
+                    end
+
+                    rect rgb(255, 234, 234)
+                    Note over PT,S: ESCENARIO B: Infositio NO ATAJA (Tubo ciego / Si no pagamos)
+                    PT->>S: Planitrack toma el archivo e intenta inyectar el POST a ciegas
+                    
+                    S-->>PT: 200 OK (Crea la nueva OF sin importar si existe otra)
+                    
+                    Note over S: CONSECUENCIA FATAL:<br/>1. La API procesa la nueva fecha y genera una SEGUNDA OF viva.<br/>2. La OF original (del día 20) JAMÁS FUE BORRADA.<br/>3. El sistema cree que debe ir a buscar dos cajas distintas.<br/>4. El camión sale físicamente el día 20 Y el día 22.<br/>5. DOBLE FALSO FLETE INMINENTE.
+                    end
+            </div>
+        </div>
+
+        <div class="description-box">
+            <h3 style="margin-top: 0; color: var(--primary);">Resumen del Modelo Operativo</h3>
+            <p><strong>1. La rusticidad de Walmart:</strong> Walmart no hace "updates" elegantes. Simplemente vuelve a tirar la misma caja dentro del saco de datos del día siguiente, pero con una etiqueta de fecha distinta.</p>
+            <p><strong>2. El colador de Infositio:</strong> Dado que nuestra API central es "ciega" (no bloquea duplicados automáticamente), le pagamos a Infositio para que actúe como un "colador inteligente". Al atajar la caja repetida, hace el trabajo de limpieza (borrar la vieja) antes de meter la nueva a nuestra base de datos.</p>
+            <p><strong>3. El riesgo de no hacerlo:</strong> Si Infositio no hace esto, la caja repetida entra directo a nuestra API. El sistema simplemente procesa la OF nueva y la OF vieja queda viva eternamente en el planificador, enviando al camión a cobrar dos veces un viaje inútil (Doble Falso Flete).</p>
+        </div>
+    </div>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

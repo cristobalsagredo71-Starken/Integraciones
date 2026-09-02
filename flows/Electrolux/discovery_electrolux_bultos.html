@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery - Electrolux: Detección Automática de Bultos</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .badge-approve {
+            background: #ecfdf5;
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #34d399;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            color: var(--secondary);
+        }
+        .tab.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+        
+        /* Content */
+        .tab-content {
+            position: absolute;
+            visibility: hidden;
+            width: 100%;
+            top: -9999px;
+            opacity: 0;
+        }
+        .tab-content.active {
+            position: relative;
+            visibility: visible;
+            top: 0;
+            opacity: 1;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Mermaid Container */
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        
+        /* Forzar al SVG de Mermaid a usar el ancho disponible y no miniaturizarse */
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--border);
+            background: #f8fafc;
+        }
+        .card-pro { border-left-color: #10b981; }
+        .card-con { border-left-color: #ef4444; }
+        .card-info { border-left-color: var(--secondary); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Discovery: Detección Automática de Bultos (Electrolux)</h1>
+            <span class="badge-approve">ESTADO: EN EVALUACIÓN (PROPUESTA HÍBRIDA)</span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tab1', event)">1. Problema y Solución</button>
+            <button class="tab" onclick="switchTab('tab2', event)">2. Flujo de Procesamiento</button>
+            <button class="tab" onclick="switchTab('tab3', event)">3. Evaluación (Pros y Contras)</button>
+        </div>
+
+        <!-- TAB 1: PROBLEMA Y SOLUCIÓN -->
+        <div id="tab1" class="tab-content active">
+            <h2>Contexto AS-IS (El Dolor)</h2>
+            <p>La operación logística de Electrolux vía VTEX no permite enviar de forma dinámica la cantidad de bultos ni la volumetría exacta por pedido, debido a limitaciones en el carrito de compras post-venta. Exigirles este desarrollo en VTEX es inviable comercialmente.</p>
+            <p><strong>Impacto Comercial:</strong> Si bien el aumento proyectado del <strong>~40% mensual en facturación</strong> ya se encuentra en negociación, absorber este dolor operativo del cliente funciona como un fuerte valor agregado para fidelizar la relación y empujar positivamente el cierre del acuerdo.</p>
+            
+            <h2>Solución Propuesta: Maestro de SKUs Estático</h2>
+            <p>Se propone una solución práctica y de rápida implementación basada en una tabla estática proporcionada por Electrolux. Dado que el 90% de sus ventas son uniproducto y, por su naturaleza de electrodomésticos (línea blanca), no existe consolidación de múltiples productos en cajas más grandes, la suma matemática de los bultos individuales refleja perfectamente la realidad física.</p>
+            
+            <div class="card card-info">
+                <h3>Reglas de Negocio (Mecanismo de Resolución)</h3>
+                <ul>
+                    <li><strong>Tabla Maestra:</strong> Electrolux entrega un archivo estático con el mapeo exacto de todos sus SKUs, indicando cantidad de bultos, pesos y dimensiones.</li>
+                    <li><strong>Mapeo Automático Universal:</strong> La API Core de Starken recibe la orden desde VTEX (independiente de si trae 1 o N productos distintos), busca los SKUs en la tabla, y asigna las características físicas exactas por cada unidad.</li>
+                    <li><strong>Bloqueo por Desconocimiento (Salud = 2):</strong> Si la orden contiene un SKU que no existe en la tabla maestra, el Worker detendrá el flujo dejándolo en estado de error, protegiendo la matriz de cobros y disparando una alerta para que Electrolux actualice su catálogo.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 2: FLUJO DE PROCESAMIENTO -->
+        <div id="tab2" class="tab-content">
+            <div class="mermaid-container">
+                <div class="mermaid">
+                    graph LR
+                    subgraph Electrolux ["Capa Cliente (VTEX)"]
+                        V1((Inicio)) --> V2["Pedido pasa a Facturado"]
+                        V2 --> V3["Notificación a Starken"]
+                    end
+
+                    subgraph Starken ["Capa de Procesamiento (Starken Core)"]
+                        S1["Recepción de Orden y Productos"] --> S2["Consultar Maestro de SKUs"]
+                        
+                        S2 --> S3{"¿SKUs Mapeados?"}
+                        S3 -->|No| S4["Alerta y Pausa de Integración"]
+                        S3 -->|Sí| S5["Asignar Bultos Físicos"]
+                        
+                        S5 --> S6["Creación Orden de Flete (OF)"]
+                        S6 --> S7((Fin))
+                        S4 --> S7
+                    end
+
+                    V3 -->|Webhook| S1
+
+                    classDef inicio fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff;
+                    classDef fin fill:#EF4444,stroke:#B91C1C,stroke-width:2px,color:#fff;
+                    classDef decision fill:#F59E0B,stroke:#D97706,stroke-width:2px,color:#fff;
+                    classDef backend fill:#F1F5F9,stroke:#3B82F6,stroke-width:2px;
+                    classDef frontend fill:#F8FAFC,stroke:#64748B,stroke-width:2px;
+                    
+                    class V1 inicio;
+                    class S7 fin;
+                    class S3 decision;
+                    class S1,S2,S4,S5,S6 backend;
+                    class V2,V3 frontend;
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; background-color: white; padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                <h3 style="margin-top: 0;">📖 Lectura del Flujo (Paso a Paso)</h3>
+                <ul>
+                    <li><strong>Recepción:</strong> VTEX manda la orden con el arreglo de productos (ej. SKU 123 x1, SKU 456 x1).</li>
+                    <li><strong>Cruce de Datos:</strong> El Core de Starken toma esos SKUs y los busca en la "Tabla Maestra" cargada previamente en el sistema.</li>
+                    <li><strong>Validación (Filtro de Seguridad):</strong> Si VTEX envía un producto nuevo que Electrolux olvidó informar, el sistema corta el flujo y devuelve un error. Esto obliga al cliente a ser responsable con la actualización de su data.</li>
+                    <li><strong>Éxito (Happy Path):</strong> Si todo cuadra, se extrae exactamente la cantidad de bultos y dimensiones de la tabla para esos SKUs (ej. el SKU 456 corresponde a 3 bultos físicos). El sistema genera la OF y emite las etiquetas correspondientes automáticamente.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 3: EVALUACIÓN -->
+        <div id="tab3" class="tab-content">
+            <div class="grid">
+                <div class="card card-pro">
+                    <h3>👍 Beneficios (Pros)</h3>
+                    <ul>
+                        <li><strong>Valor Agregado (Fidelización):</strong> Soluciona una gran fricción administrativa de Electrolux, dándole un impulso positivo a la negociación en curso por el aumento del 40% en facturación.</li>
+                        <li><strong>Cero Desarrollo en VTEX:</strong> El cliente no invierte un peso en tocar su plataforma E-commerce.</li>
+                        <li><strong>Simplicidad de Arquitectura:</strong> Para el equipo de TI de Starken, cruzar el ID de VTEX contra una tabla matriz para extraer atributos es infinitamente más barato y rápido que programar un algoritmo de consolidación 3D en el Core. Al eliminar la validación de "Monoitem vs Multiitem", el flujo queda universal.</li>
+                    </ul>
+                </div>
+
+                <div class="card card-con">
+                    <h3>👎 Riesgos y Limitaciones (Contras)</h3>
+                    <ul>
+                        <li>
+                            <strong>Mantenimiento Estático y Dependencia:</strong> La tabla es rígida. Si Electrolux lanza un producto nuevo o cambia la caja de un microondas y olvida avisarnos, la integración fallará o cobraremos mal.
+                            <br/><span style="color: var(--accent); font-size: 0.9em;">↳ <strong>Mitigación Propuesta:</strong> Establecer un SLA formal (ej. "Toda actualización de SKU debe enviarse con 48hrs de anticipación"). Además, el error 400 por SKU no encontrado actuará como alerta temprana automática para que ellos corrijan.</span>
+                        </li>
+                        <li>
+                            <strong>Discrepancia Física en Terreno:</strong> Si la tabla dice que el SKU genera 3 bultos, Starken imprimirá 3 etiquetas. Si el bodeguero de Electrolux decide amarrarlos y entregar 1 solo bulto gigante, habrá problemas en el escaneo del transportista.
+                            <br/><span style="color: var(--accent); font-size: 0.9em;">↳ <strong>Mitigación Propuesta:</strong> Blindaje Comercial. Incluir una cláusula indicando que Starken operará y cobrará estrictamente lo que dicta la tabla. Cualquier discrepancia física originada en el andén es responsabilidad del cliente y sujeta a rechazo de carga por el transportista.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

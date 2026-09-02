@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exposición de Casos y Alternativas - In-House</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --text: #334155;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+        }
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            color: var(--secondary);
+        }
+        .tab.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tab 1: Mermaid */
+        .mermaid-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+        .analysis-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Tab 2: Grid and Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-header {
+            padding: 1.5rem;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .card-header.op1 { background: #3b82f6; } /* Blue */
+        .card-header.op2 { background: #8b5cf6; } /* Purple */
+        .card-header.op3 { background: #f59e0b; } /* Orange */
+        .card-header.op4 { background: #10b981; } /* Green */
+        
+        .card-body {
+            padding: 1.5rem;
+            flex: 1;
+        }
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .section-title:first-child { margin-top: 0; }
+        
+        .card-body ul { margin: 0; padding-left: 1.2rem; }
+        .card-body li { margin-bottom: 0.5rem; }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .badge.tech { background: #f1f5f9; color: #475569; border: 1px solid var(--border); }
+        .stats-banner {
+            display: flex;
+            justify-content: space-around;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--secondary);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-highlight {
+            color: var(--success);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Impacto del Modelo Operativo In-House</h1>
+            <p class="subtitle">Comparativa del Modelo y Alternativas Estratégicas</p>
+        </div>
+
+        <div class="stats-banner">
+            <div class="stat-item">
+                <span class="stat-label">Volumen Mensual Promedio</span>
+                <span class="stat-value">1.048 <span style="font-size: 1rem; color: #64748b;">OFs</span></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Facturación Mensual Promedio Actual</span>
+                <span class="stat-value">$25.149.983</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Acuerdo de Aumento (Proyección)</span>
+                <span class="stat-value stat-highlight">$80.000.000 <span style="font-size: 1rem; color: #64748b;">mensual</span></span>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tab1', event)">1. Exposición de Casos (Hoy vs Solución)</button>
+            <button class="tab" onclick="switchTab('tab2', event)">2. Alternativas de Extracción de In-House</button>
+        </div>
+
+        <!-- TAB 1 -->
+        <div id="tab1" class="tab-content active">
+            <div class="mermaid-container">
+                <div class="mermaid" style="flex: 1;">
+                    graph TD
+                        %% HOY
+                        subgraph HOY ["HOY (Situación Actual)"]
+                            H_Bodegas["San Francisco / Redex"]:::neutral
+                            H_InHouse["IN-HOUSE"]:::neutral
+                            H_Tareas["Reetiqueta<br/>Asigna Ticket"]:::tarea
+                            H_Resultado["Envía Todo<br/><br/>No se sabe si<br/>la carga está comp."]:::problema
+                            
+                            H_Bodegas --> H_InHouse
+                            H_InHouse --> H_Tareas
+                            H_Tareas --> H_Resultado
+                        end
+
+                        classDef neutral fill:#f8fafc,stroke:#cbd5e1,stroke-width:2px;
+                        classDef tarea fill:#f1f5f9,stroke:#94a3b8,stroke-width:2px;
+                        classDef problema fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b;
+                </div>
+                
+                <div class="mermaid" style="flex: 1;">
+                    graph TD
+                        %% CON SOLUCIÓN
+                        subgraph SOLUCION ["CON SOLUCIÓN (Facturación Ripley)"]
+                            S_Bodegas["San Francisco / Redex"]:::neutral
+                            S_InHouse["IN-HOUSE"]:::neutral
+                            S_Tareas["Carga Completa<br/>Pallet Rezago<br/>Reetiqueta<br/>Asigna Ticket"]:::tarea
+                            S_Resultado["Enviará solo cargas comp.<br/>Resto a Pallet Rezago<br/>(Ripley debería mover pallet)"]:::solucion_res
+                            
+                            S_Bodegas --> S_InHouse
+                            S_InHouse --> S_Tareas
+                            S_Tareas --> S_Resultado
+                        end
+
+                        classDef neutral fill:#f8fafc,stroke:#cbd5e1,stroke-width:2px;
+                        classDef tarea fill:#f1f5f9,stroke:#94a3b8,stroke-width:2px;
+                        classDef solucion_res fill:#dcfce7,stroke:#22c55e,stroke-width:2px,color:#166534;
+                </div>
+            </div>
+
+            <div class="analysis-box">
+                <h3 style="margin-top: 0; color: var(--primary);">Análisis del Caso</h3>
+                <p>Tal como muestra el esquema superior, la nueva solución cambia la operación, pasando de un envío a granel a un modelo de filtro estricto desde el origen mediante el equipo In-House.</p>
+                
+                <h4 style="color: var(--success); margin-bottom: 0.5rem;">Beneficios de la Solución</h4>
+                <ul style="margin-top: 0; margin-bottom: 1rem;">
+                    <li><strong>Sanidad Financiera:</strong> Al asegurar que las órdenes de flete se emitan de forma completa, se eliminan las fugas de facturación y las engorrosas consolidaciones manuales.</li>
+                    <li><strong>Tracking por CUD:</strong> Habilita el seguimiento directo mediante el Código Único de Despacho, homologando el lenguaje entre los sistemas y mejorando la visibilidad del cliente.</li>
+                </ul>
+
+                <h4 style="color: var(--danger); margin-bottom: 0.5rem;">El Problema (Efecto Secundario)</h4>
+                <p style="margin-top: 0;">Para lograr estos beneficios, <strong>se hace necesario contar con personal In-House permanente</strong> para ejecutar las tareas manuales de filtro ("Carga Completa" y "Pallet Rezago"). Al contrastar esto con las bodegas:</p>
+                <ul style="margin-top: 0;">
+                    <li><strong>En San Francisco:</strong> Dado el alto volumen, esta exigencia se justifica económicamente.</li>
+                    <li><strong>En Redex:</strong> El modelo se quiebra. Pagar un recurso In-House exclusivo para gestionar tan pocos bultos y retener un pallet de rezago resulta en <strong>pérdida económica directa</strong> para Starken.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 2 -->
+        <div id="tab2" class="tab-content">
+            <p style="margin-bottom: 1.5rem; color: #475569;">Propuestas operativas y sistémicas para eliminar la dependencia de personal In-House de Starken en las bodegas del cliente (especialmente crítico para operaciones de bajo volumen), mitigando el problema de las manualidades obligatorias descritas en la pestaña anterior.</p>
+            <div class="grid">
+                
+                <!-- Opción 1 -->
+                <div class="card">
+                    <div class="card-header op1">
+                        1. Homologación de Etiqueta + Autocarga (Transportista)
+                    </div>
+                    <div class="card-body">
+                        <span class="badge tech">Alto esfuerzo TI (Cliente)</span>
+                        <span class="badge tech">Integración API</span>
+                        
+                        <div class="section-title">Mecánica Operativa</div>
+                        <p>El cliente consume la API de Starken al momento de cerrar su caja. Imprimen directamente la etiqueta final (homologada). Cuando el transportista de Starken llega a retirar, hace el "pinchazo" (escaneo) para crear la nómina y cargar directo al camión.</p>
+                        
+                        <div class="section-title">Casuísticas y Riesgos (Lo que se rompe)</div>
+                        <ul>
+                            <li><strong>Diferencias de Cuadratura:</strong> El cliente declara una cantidad de órdenes emitidas, pero el chofer escanea una cantidad menor. La responsabilidad legal y financiera queda en el aire durante el traspaso.</li>
+                            <li><strong>Carga Incompleta en el Andén:</strong> Si el chofer pincha un bulto (1 de 2) y el segundo no aparece, no puede armar un "pallet de rezago" mientras el camión espera. Traba la ruta.</li>
+                            <li><strong>Sobrecarga al Chofer:</strong> Pasa de ser conductor a operador logístico validando completitud.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Opción 2 -->
+                <div class="card">
+                    <div class="card-header op2">
+                        2. Recepción a Granel + Cross-Docking (Hub Starken)
+                    </div>
+                    <div class="card-body">
+                        <span class="badge tech">Cambio de Flujo Logístico</span>
+                        
+                        <div class="section-title">Mecánica Operativa</div>
+                        <p>Se retira la carga con la etiqueta nativa del cliente (sin emitir OF previa) y se lleva "ciega" a una planta central o Hub de Starken. El proceso de hermanado, validación de completitud, emisión de etiqueta y armado del pallet de rezago se hace in-house, pero <strong>dentro de las instalaciones de Starken</strong>.</p>
+                        
+                        <div class="section-title">Casuísticas y Riesgos (Lo que se rompe)</div>
+                        <ul>
+                            <li><strong>Ceguera en Primera Milla:</strong> Si se pierde un bulto entre la bodega del cliente y el Hub de Starken, no hay tracking de Starken para responder. Problema de responsabilidad de inventario.</li>
+                            <li><strong>Rezagos Físicos en Starken:</strong> Los pallets de rezago quedan físicamente en las plantas de Starken. El cliente tendría que ir a buscarlos o pagar flete de retorno por carga incompleta.</li>
+                            <li><strong>Aumento de SLA:</strong> Agrega un salto y tiempo de procesamiento intermedio antes del ruteo a destino.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Opción 3 -->
+                <div class="card">
+                    <div class="card-header op3">
+                        3. Kiosko de Auto-Atención (Self-Service)
+                    </div>
+                    <div class="card-body">
+                        <span class="badge tech">Hardware + UX</span>
+                        <span class="badge tech">Baja Fricción TI Cliente</span>
+                        
+                        <div class="section-title">Mecánica Operativa</div>
+                        <p>Starken instala un "Tótem" (Computador + Lector + Etiquetadora) en bodegas de bajo volumen. El <strong>operario del cliente</strong> hace el pinchazo. El sistema (pantalla) le indica con colores si el pedido está completo (imprime etiqueta Starken) o incompleto (le indica apartarlo al rezago).</p>
+                        
+                        <div class="section-title">Casuísticas y Riesgos (Lo que se rompe)</div>
+                        <ul>
+                            <li><strong>Dependencia del Cliente:</strong> Starken confía en la buena ejecución y voluntad del personal del cliente para separar físicamente los rezagos.</li>
+                            <li><strong>Soporte Técnico de Hardware:</strong> Mantención de impresoras, reposición de etiquetas térmicas y fallas de red en una instalación que no controlamos.</li>
+                            <li><strong>Auditoría:</strong> Requiere validación cruzada fuerte al momento de que el chofer retire la nómina generada por el kiosko.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Opción 4 -->
+                <div class="card">
+                    <div class="card-header op4">
+                        4. Drop-Off (Inyección Directa en Sucursal Starken)
+                    </div>
+                    <div class="card-body">
+                        <span class="badge tech">Comercial / Contrato</span>
+                        
+                        <div class="section-title">Mecánica Operativa</div>
+                        <p>Para operaciones con volumen ínfimo, se elimina el servicio de retiro. Se exige que el cliente inyecte (vaya a dejar) la carga a un centro de distribución o sucursal Starken cercana, usando un portal web para pre-emitir la carga.</p>
+                        
+                        <div class="section-title">Casuísticas y Riesgos (Lo que se rompe)</div>
+                        <ul>
+                            <li><strong>Fricción Comercial:</strong> Modifica la promesa de servicio (retiro en bodega) por un servicio de sucursal. El cliente podría exigir rebaja de tarifas.</li>
+                            <li><strong>Adopción de Plataforma:</strong> Obliga al cliente a tener a un operador digitando o emitiendo a través del Portal Starken antes del despacho.</li>
+                            <li><strong>Carga Incompleta en Mostrador:</strong> La validación de rezago ocurriría en el mostrador de la sucursal de Starken, generando demoras en la atención y fricciones físicas.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>

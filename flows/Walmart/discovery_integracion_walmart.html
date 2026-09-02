@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery: Integración Walmart (Logística Inversa)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0F172A;
+            --primary-light: #1E293B;
+            --accent: #2563EB;
+            --accent-hover: #1D4ED8;
+            --bg-body: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #334155;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: #94A3B8;
+            font-size: 0.95rem;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #F1F5F9;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background-color: var(--bg-card);
+        }
+
+        .tab-content {
+            opacity: 0;
+            position: absolute;
+            pointer-events: none;
+            padding: 2.5rem;
+            visibility: hidden;
+            flex-grow: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .tab-content.active {
+            opacity: 1;
+            position: relative;
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography & Content inside Tabs */
+        h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1rem;
+            color: var(--primary-light);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Flowchart Container */
+        .mermaid-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FAFAFA;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .mermaid svg {
+            width: 100% !important;
+            max-width: 1000px !important;
+            height: auto !important;
+            min-height: 350px !important;
+        }
+
+        /* Pros and Cons Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .card-pro {
+            border-top: 4px solid var(--success);
+            background-color: #F0FDF4;
+        }
+        
+        .card-pro h3 { color: #065F46; margin-top: 0; }
+
+        .card-con {
+            border-top: 4px solid var(--danger);
+            background-color: #FEF2F2;
+        }
+
+        .card-con h3 { color: #991B1B; margin-top: 0; }
+
+        .card-warning {
+            border-top: 4px solid var(--warning);
+            background-color: #FFFBEB;
+            grid-column: span 2;
+        }
+
+        .card-warning h3 { color: #92400E; margin-top: 0; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <h1>Discovery: PRY-XX Reagendamiento Walmart (Logística Inversa)</h1>
+            <p>Documento de Arquitectura y Diseño Operativo | Versión 1.0 (Modo Autónomo)</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')">1. Problema y Solución</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Flujo de Procesamiento</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')">3. Evaluación (Pros, Contras y Riesgos)</button>
+        </div>
+
+        <!-- TAB 1: PROBLEMA Y SOLUCIÓN -->
+        <div id="tab1" class="tab-content active">
+            <h2>Contexto AS-IS (Problema)</h2>
+            <p>El sistema actual de integración con Walmart para el proceso de logística inversa no soporta modificaciones de fecha (reagendamientos) sobre órdenes de retiro ya transmitidas. Cuando el cliente final solicita un cambio de fecha, la inyección del nuevo requerimiento genera una duplicidad de órdenes activas para el mismo identificador único (cartón).</p>
+            
+            <h3>Dimensionamiento (Business Case)</h3>
+            <ul>
+                <li><strong>Volumen Total:</strong> ~600 pedidos mensuales de Logística Inversa Walmart.</li>
+                <li><strong>Tasa de Reagendamiento:</strong> 1% a 5% (entre 6 y 30 casos al mes máximo).</li>
+            </ul>
+            <p>Dado el bajo volumen de casos afectados, se busca una solución rápida (MVP) de bajo impacto en el ecosistema Core.</p>
+            
+            <h2>Arquitectura TO-BE (Solución Acordada)</h2>
+            <p>Se define un patrón de integración basado en <strong>"Anulación y Re-creación"</strong>. Se descarta la alteración directa (UPDATE) de los registros existentes para preservar la integridad y trazabilidad de los eventos logísticos.</p>
+            
+            <h3>Mecanismo de Resolución:</h3>
+            <ul>
+                <li><strong>Intercepción de Carga:</strong> Al recibir el set de datos periódico desde Walmart, la capa de integración (Infositio) aislará cada cartón y consultará su historial en <em>Planning Track</em>.</li>
+                <li><strong>Evaluación de Estados:</strong> El sistema validará el estado actual de los registros asociados al cartón. Si existe un registro histórico en estado terminal (ej. "No retirado"), se conservará intacto.</li>
+                <li><strong>Regla de Anulación:</strong> Si se detecta un registro en estado <strong>Pendiente</strong> (Sin programar), el sistema inyectará un evento de anulación sistémica sobre dicho registro, registrando la traza correspondiente ("Anulado por cambio de Walmart").</li>
+                <li><strong>Freno de Mano (Rechazo):</strong> Si el registro se encuentra en estado <strong>Asignado</strong> (el camión ya salió) o Terminal, el sistema abortará la operación y devolverá un rechazo automático a Walmart. Esto previene la duplicidad de retiros.</li>
+                <li><strong>Continuidad de Flujo:</strong> Solo tras anular exitosamente el registro pendiente (o si el cartón es 100% nuevo), el flujo estándar procesará la nueva solicitud.</li>
+            </ul>
+        </div>
+
+        <!-- TAB 2: FLUJO DE LA SOLUCIÓN -->
+        <div id="tab2" class="tab-content">
+            <h2>Diagrama de Carriles (Swimlane)</h2>
+            <p>El siguiente diagrama BPMN ilustra la interacción entre la Capa Cliente (Walmart) y la Capa de Procesamiento Interno (Infositio / Planning Track) al procesar una carga de retiros.</p>
+            
+            <div class="mermaid-container">
+                <div class="mermaid">
+                %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'primaryBorderColor': '#334155', 'lineColor': '#94A3B8', 'fontFamily': 'Inter'}}}%%
+                graph LR
+                    subgraph Walmart ["Capa Cliente (Walmart)"]
+                        A((Inicio)) --> B["Envío de Carga Diaria con Cartones"]
+                    end
+
+                    subgraph Starken ["Capa de Procesamiento (Infositio / Planning Track)"]
+                        B --> C["Recepción de Payload"]
+                        C --> D[("Base de Datos Planning Track")]
+                        D --> E{"¿Existe el Cartón?"}
+                        
+                        E -- "Sí" --> F{"¿Tiene estado Pendiente?"}
+                        E -- "No" --> H["Crear Nuevo Retiro"]
+                        
+                        F -- "Sí" --> G["Ejecutar Anulación del Registro Pendiente"]
+                        F -- "No (Terminal o Asignado)" --> H
+                        
+                        G --> H
+                        
+                        H --> I((Fin))
+                    end
+
+                    style A fill:#10B981,stroke:#047857,stroke-width:2px,color:#fff
+                    style I fill:#EF4444,stroke:#B91C1C,stroke-width:2px,color:#fff
+                    style E fill:#F8FAFC,stroke:#F59E0B,stroke-width:2px
+                    style F fill:#F8FAFC,stroke:#F59E0B,stroke-width:2px
+                    style D fill:#F1F5F9,stroke:#3b82f6,stroke-width:2px
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; background-color: white; padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px;">
+                <h3 style="margin-top: 0;">📖 Lectura del Flujo (Paso a Paso)</h3>
+                <p>El diagrama modela el comportamiento general de la integración, la cual evalúa cada solicitud recibida para separar dinámicamente los pedidos nuevos de los reagendamientos.</p>
+                <ul>
+                    <li><strong>Recepción de Payload:</strong> Walmart envía su carga masiva diaria de retiros. Infositio toma cada código único (Cartón) y consulta su historial en la Base de Datos de Planning Track.</li>
+                    <li><strong>1ª Bifurcación: ¿Existe el Cartón?</strong>
+                        <ul>
+                            <li><strong>Camino del "No":</strong> Flujo regular (aprox. 95% de la operación). Al no existir historial, se trata de un pedido nuevo. El sistema avanza directo a <em>Crear Nuevo Retiro</em>.</li>
+                            <li><strong>Camino del "Sí":</strong> El cartón ya existe. Walmart lo está reenviando para actualizar la fecha (Reagendamiento). El sistema avanza a la siguiente barrera de validación.</li>
+                        </ul>
+                    </li>
+                    <li><strong>2ª Bifurcación: ¿Tiene estado Pendiente?</strong>
+                        <ul>
+                            <li><strong>Camino del "Sí":</strong> El registro anterior está "Sin programar". Es seguro interceptarlo. El sistema <em>Anula</em> el registro viejo y luego avanza a <em>Crear Nuevo Retiro</em> con la fecha actualizada.</li>
+                            <li><strong>Camino del "No (Terminal o Asignado)":</strong> El registro anterior ya está en ruta (Asignado) o finalizado (ej. No retirado). No se puede anular por reglas de negocio. El sistema omite la anulación y avanza a <em>Crear Nuevo Retiro</em>.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 3: PROS Y CONTRAS -->
+        <div id="tab3" class="tab-content">
+            <h2>Evaluación Arquitectónica</h2>
+            
+            <div class="grid-2">
+                <div class="card card-pro">
+                    <h3>👍 Beneficios y Pros</h3>
+                    <ul>
+                        <li><strong>Trazabilidad Intacta:</strong> Al no utilizar operaciones de borrado físico (DELETE), se mantiene el historial estadístico de excepciones (ej. "No retirado") vital para las métricas logísticas.</li>
+                        <li><strong>Bajo Impacto Core:</strong> Reutiliza la lógica de integración existente. No requiere construir nuevos endpoints complejos, solo anteponer una regla de validación de estados (Interceptor).</li>
+                        <li><strong>Resolución Dual:</strong> La regla soluciona simultáneamente los reagendamientos de retiros nuevos y los reagendamientos sobre intentos fallidos generados automáticamente por el sistema.</li>
+                    </ul>
+                </div>
+
+                <div class="card card-con">
+                    <h3>👎 Limitaciones y Contras</h3>
+                    <ul>
+                        <li>
+                            <strong>Dependencia del Cliente:</strong> La solución asume que Walmart validará nuestra Matriz de Tránsitos. Si envían fechas inválidas, el sistema las procesará, trasladando el fallo a la operación física.
+                            <br/><span style="color: var(--accent); font-size: 0.9em;">↳ <strong>Solución Propuesta:</strong> Implementar una validación cruzada básica en Infositio que rechace fechas en el pasado o domingos, como resguardo de seguridad mínimo.</span>
+                        </li>
+                        <li>
+                            <strong>Falta de Visibilidad Inicial:</strong> Sin una modificación en las plantillas de correo, Walmart no tendrá confirmación explícita de que un retiro fue creado producto de un reagendamiento vs una creación estándar.
+                            <br/><span style="color: var(--accent); font-size: 0.9em;">↳ <strong>Solución Propuesta:</strong> Cotizar con Infositio como ítem opcional la inclusión de una bandera ("flag") en el correo. Si el costo es marginal, se aprueba; si es alto, se asume el riesgo operativo y se descarta.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card card-warning">
+                    <h3>⚠️ Riesgo Aceptado: Condición de Carrera</h3>
+                    <p>Si Walmart emite el reagendamiento justo cuando la Operación de Starken realiza la asignación de rutas (estado <strong>Asignado</strong>), la regla de anulación fallará y se creará un retiro duplicado.</p>
+                    <p><strong>Evaluación de Impacto:</strong> Considerando un universo de 30 reagendamientos mensuales, la probabilidad de que ocurran exactamente en la ventana de asignación es ínfima (estimado 1-2 casos mensuales). <strong>Decisión de Diseño:</strong> Se asume este riesgo operativo (doble falso flete) ya que el costo en horas de desarrollo (HH) para programar reglas más complejas de bloqueo supera el costo de la ineficiencia operativa de 2 casos al mes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+
+        function openTab(evt, tabId) {
+            var i, tabcontent, tablinks;
+            
+            // Ocultar todos los contenidos de pestaña
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Desactivar todos los botones
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            // Mostrar la pestaña actual y añadir clase 'active' al botón
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
