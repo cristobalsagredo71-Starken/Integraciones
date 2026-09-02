@@ -980,8 +980,8 @@ function renderCharts() {
         ctxVol.parentElement.style.position = 'relative';
         ctxVol.parentElement.style.height = '400px';
 
-        const sortedByRevenue = [...clients].filter(c => c.revenue > 0).sort((a,b) => b.revenue - a.revenue);
-        const sortedByVolume = [...clients].filter(c => c.volume > 0).sort((a,b) => b.volume - a.volume);
+        const sortedByRevenue = [...clientsData].filter(c => c.revenue > 0).sort((a,b) => b.revenue - a.revenue);
+        const sortedByVolume = [...clientsData].filter(c => c.volume > 0).sort((a,b) => b.volume - a.volume);
 
         if (!window.Chart) {
             ctxRev.parentElement.innerHTML += '<p style="color:red">Error: Chart.js no cargó.</p>';
