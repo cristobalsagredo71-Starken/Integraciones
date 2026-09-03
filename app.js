@@ -720,6 +720,7 @@ formInit.addEventListener('submit', async (e) => {
             hh: parseInt(document.getElementById('input-hh').value) || 0,
             phase: document.getElementById('input-phase').value,
             owner: document.getElementById('input-owner').value,
+            estimated_date: document.getElementById('input-estimated-date').value,
             bottleneck: document.getElementById('input-bottleneck').value,
             updated_at: new Date().toISOString()
         };
