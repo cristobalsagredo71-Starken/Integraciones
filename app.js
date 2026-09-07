@@ -720,7 +720,13 @@ formInit.addEventListener('submit', async (e) => {
             hh: parseInt(document.getElementById('input-hh').value) || 0,
             phase: document.getElementById('input-phase').value,
             owner: document.getElementById('input-owner').value,
-            estimated_date: document.getElementById('input-estimated-date').value,
+                        estimated_date: document.getElementById('input-estimated-date').value,
+            date_start_discovery: document.getElementById('input-date-start-discovery').value,
+            date_end_discovery: document.getElementById('input-date-end-discovery').value,
+            date_start_design: document.getElementById('input-date-start-design').value,
+            date_end_design: document.getElementById('input-date-end-design').value,
+            date_start_dev: document.getElementById('input-date-start-dev').value,
+            date_end_dev: document.getElementById('input-date-end-dev').value,
             bottleneck: document.getElementById('input-bottleneck').value,
             updated_at: new Date().toISOString()
         };
