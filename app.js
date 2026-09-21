@@ -1,4 +1,4 @@
-// --- CONFIGURACIÃƒâ€œN SUPABASE ---
+﻿// --- CONFIGURACIÃƒâ€œN SUPABASE ---
 // ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨ IMPORTANTE: REEMPLAZA "TU_API_KEY_AQUI" CON TU CLAVE "anon public" ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨
 const SUPABASE_URL = 'https://dzmsfxnvfardckddvzjt.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_J0eJ5rRXzERV8RxiYk95sg_NTd8JWYN';
@@ -157,7 +157,7 @@ function openFlowsModal(clientName) {
     const existing = document.getElementById('dynamic-flows-modal');
     if (existing) existing.remove();
     
-    let linksHtml = flows.map(f => `<a href="${f.url}" target="_blank" class="badge-tag" style="display: block; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); color: var(--text-primary); text-decoration: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; text-align: center;">Ã°Å¸â€œâ€ž ${f.name}</a>`).join('');
+    let linksHtml = flows.map(f => `<a href="${f.url}" target="_blank" class="badge-tag" style="display: block; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); color: var(--text-primary); text-decoration: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; text-align: center;">🔗 </a>`).join('');
     
     const modalHtml = `
     <div id="dynamic-flows-modal" class="modal-overlay active" style="z-index: 9999;">
@@ -210,7 +210,7 @@ function renderGrid() {
     });
 
     if (filteredInits.length === 0 && initiatives.length > 0) {
-        gridBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay resultados para tu bÃƒÂºsqueda</td></tr>';
+        gridBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay resultados para tu búsqueda</td></tr>';
         return;
     }
     
@@ -245,14 +245,14 @@ window.toggleBitacora = (id) => {
 };
 const renderInitRow = (init) => {
         const priorityHtml = init.priority >= 4 
-            ? `<span class="priority-badge p${init.priority}">P${init.priority}${init.priority === 5 ? ' Ã°Å¸â€Â¥' : ''}</span>`
+            ? `<span class="priority-badge p${init.priority}">P${init.priority}</span>`
             : (init.priority > 0 ? `<span class="priority-badge p${init.priority}">P${init.priority}</span>` : '-');
 
         let bottleneckHtml = '-';
         if (init.phase === 'STANDBY') {
-            bottleneckHtml = `<span style="color: var(--danger)">Ã°Å¸â€ºâ€˜ Bloqueada: ${init.bottleneck || 'Sin motivo'}</span>`;
+            bottleneckHtml = `<span style="color: var(--danger)">⛔ Bloqueada: ${init.bottleneck || 'Sin motivo'}</span>`;
         } else if (init.bottleneck) {
-            bottleneckHtml = `<span style="color: var(--warning)">Ã¢Å¡Â Ã¯Â¸Â ${init.bottleneck}</span>`;
+            bottleneckHtml = `<span style="color: var(--warning)">⚠️ ${init.bottleneck}</span>`;
         }
         
         const datesHtml = `
@@ -267,9 +267,9 @@ const renderInitRow = (init) => {
                 <td style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">${priorityHtml}</td>
                 <td style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                     <strong style="font-size: 1.05rem;">${init.name}</strong> ${getFlowsHtml(init.name)}
-                    ${(init.logs && init.logs.length > 0) ? `<button type="button" onclick="event.stopPropagation(); toggleBitacora('${init.id}')" class="badge-tag" style="background: rgba(107, 114, 128, 0.2); color: var(--text-muted); border: 1px solid rgba(107, 114, 128, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px; cursor: pointer;">BitÃƒÂ¡cora (${init.logs.length}) Ã°Å¸â€œâ€“</button>` : ''}
-                    ${init.jira_url ? `<br><a href="${init.jira_url}" target="_blank" class="badge-tag" style="background: rgba(38, 132, 255, 0.2); color: #4c9aff; border: 1px solid rgba(38,132,255,0.4); text-decoration: none; margin-top: 4px; display: inline-block;">Jira Ã¢â€ â€”</a>` : ''}
-                    ${init.confluence_link ? `<a href="${init.confluence_link}" target="_blank" class="badge-tag" style="background: rgba(0, 184, 217, 0.2); color: #00b8d9; border: 1px solid rgba(0, 184, 217, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px;">Confluence Ã¢â€ â€”</a>` : ''}
+                    ${(init.logs && init.logs.length > 0) ? `<button type="button" onclick="event.stopPropagation(); toggleBitacora('${init.id}')" class="badge-tag" style="background: rgba(107, 114, 128, 0.2); color: var(--text-muted); border: 1px solid rgba(107, 114, 128, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px; cursor: pointer;">Bitácora (${init.logs.length}) ▼</button>` : ''}
+                    ${init.jira_url ? `<br><a href="${init.jira_url}" target="_blank" class="badge-tag" style="background: rgba(38, 132, 255, 0.2); color: #4c9aff; border: 1px solid rgba(38,132,255,0.4); text-decoration: none; margin-top: 4px; display: inline-block;">Jira →</a>` : ''}
+                    ${init.confluence_link ? `<a href="${init.confluence_link}" target="_blank" class="badge-tag" style="background: rgba(0, 184, 217, 0.2); color: #00b8d9; border: 1px solid rgba(0, 184, 217, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px;">Confluence →</a>` : ''}
                 </td>
                 <td style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                     <span class="badge" style="background: rgba(255,255,255,0.1)">${init.type}</span>
@@ -443,7 +443,7 @@ function renderClientsGrid() {
             <td>
                 <strong>${clientData.name}</strong> ${getFlowsHtml(clientData.name)}
                 <span class="tags-container">${(clientData.tags || []).map(t => `<span class="badge-tag ${t.toLowerCase()}">${t}</span>`).join('')}</span>
-                ${clientData.attachments ? `<br><a href="${clientData.attachments}" target="_blank" style="font-size: 0.8rem; color: var(--info);">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Ver DocumentaciÃƒÆ’Ã‚Â³n</a>` : ''}
+                ${clientData.attachments ? `<br><a href="${clientData.attachments}" target="_blank" style="font-size: 0.8rem; color: var(--info);">📄 Ver Documentación</a>` : ''}
             </td>
             <td>${clientData.sponsor || '-'}</td>
             <td>
@@ -467,7 +467,7 @@ function renderClientsGrid() {
 }
 
 window.deleteClientSoft = async (id) => {
-    if (!confirm('Ãƒâ€šÃ‚Â¿EstÃƒÆ’Ã‚Â¡s seguro de que quieres eliminar este cliente? Esto ocultarÃƒÆ’Ã‚Â¡ todas sus pedidas.')) return;
+    if (!confirm('Ãƒâ€šÃ‚¿EstÃƒÆ’Ã‚Â¡s seguro de que quieres eliminar este cliente? Esto ocultarÃƒÆ’Ã‚Â¡ todas sus pedidas.')) return;
     try {
         const { error } = await client
             .from('clients')
@@ -938,14 +938,14 @@ function renderLogs() {
     if (!container) return;
     
     if (currentLogs.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">No hay registros en la bitÃƒÂ¡cora.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">No hay registros en la bitácora.</p>';
         return;
     }
     
     container.innerHTML = currentLogs.map((log, index) => `
         <div class="log-entry" style="position: relative;">
             <button type="button" onclick="deleteLog(${index})" class="btn-icon" style="position: absolute; right: 0; top: 0.5rem; color: var(--danger); font-size: 1.1rem; border: none; background: transparent; cursor: pointer;">&times;</button>
-            <div class="log-meta">${log.date} Ã¢â‚¬Â¢ ${log.author || 'Starken PMO'}</div>
+            <div class="log-meta">${log.date} • ${log.author || 'Starken PMO'}</div>
             <div class="log-content">${log.text}</div>
         </div>
     `).join('');
@@ -1169,7 +1169,7 @@ window.uploadKitFile = async (inputId, fileName) => {
         if (error) throw error;
         
         statusDiv.style.color = 'var(--success)';
-        statusDiv.textContent = 'Â¡Subido con Ã©xito! (Nota: asegÃºrate de que el bucket "onboarding_kit" exista y sea pÃºblico en Supabase).';
+        statusDiv.textContent = 'Â¡Subido con éxito! (Nota: asegÃºrate de que el bucket "onboarding_kit" exista y sea pÃºblico en Supabase).';
     } catch (error) {
         console.error(error);
         statusDiv.style.color = 'var(--danger)';

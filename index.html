@@ -120,7 +120,7 @@
                     <canvas id="chartVolume"></canvas>
                 </div>
                 <div>
-                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">Ranking FacturaciÃƒÂ³n (Top 10)</h3>
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">Ranking Facturación (Top 10)</h3>
                     <canvas id="chartRevenue"></canvas>
                 </div>
             </div>
@@ -130,25 +130,25 @@
           <div class="panel" style="padding: 2rem;">
               <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Repositorio de flujos operativos y manuales transversales de la PMO.</p>
               <div id="conductor-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
-                  <!-- Tarjetas de flujos se inyectarÃƒÂ¡n aquÃƒÂ­ -->
+                  <!-- Tarjetas de flujos se inyectarán aquÃƒÂ­ -->
               </div>
           </div>
       </div>
               <!-- VISTA GESTION KIT -->
         <div id="view-kit" style="display: none; padding-top: 1rem;">
             <div style="background: var(--surface); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">GestiÃ³n Kit de Onboarding</h3>
-                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px;">Sube los archivos PDF oficiales para que estÃ©n disponibles automÃ¡ticamente en el portal de los KAM. Usa los nombres de archivo exactos solicitados.</p>
+                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Gestión Kit de Onboarding</h3>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px;">Sube los archivos PDF oficiales para que estén disponibles automáticamente en el portal de los KAM. Usa los nombres de archivo exactos solicitados.</p>
                 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>CatÃ¡logo Funcional de APIs</label>
+                        <label>Catálogo Funcional de APIs</label>
                         <input type="file" id="file-catalogo" accept="application/pdf">
                         <button class="btn-secondary" onclick="uploadKitFile('file-catalogo', 'Flujo_Funcional_APIs_Starken.pdf')" style="margin-top: 0.5rem; width: 100%;">Subir y Reemplazar</button>
                     </div>
                     
                     <div class="form-group">
-                        <label>Diccionario de HomologaciÃ³n</label>
+                        <label>Diccionario de Homologación</label>
                         <input type="file" id="file-diccionario" accept="application/pdf, .xlsx, .csv">
                         <button class="btn-secondary" onclick="uploadKitFile('file-diccionario', 'Diccionario_Homologacion_Starken.pdf')" style="margin-top: 0.5rem; width: 100%;">Subir y Reemplazar</button>
                     </div>
@@ -212,7 +212,7 @@
                             <input type="number" id="input-volume">
                         </div>
                         <div class="form-group">
-                            <label>FacturaciÃƒÂ³n Mensual Promedio (CLP)</label>
+                            <label>Facturación Mensual Promedio (CLP)</label>
                             <input type="number" id="input-revenue">
                         </div>
                         
@@ -228,7 +228,7 @@
                                     <input type="number" id="input-hist-volume">
                                 </div>
                                 <div class="form-group">
-                                    <label>FacturaciÃƒÂ³n (CLP)</label>
+                                    <label>Facturación (CLP)</label>
                                     <input type="number" id="input-hist-revenue">
                                 </div>
                                 <div class="form-group">
@@ -236,7 +236,7 @@
                                 </div>
                             </div>
                             <table class="data-grid" style="font-size: 0.8rem;">
-                                <thead><tr><th>Mes</th><th>OFs</th><th>FacturaciÃƒÂ³n</th><th></th></tr></thead>
+                                <thead><tr><th>Mes</th><th>OFs</th><th>Facturación</th><th></th></tr></thead>
                                 <tbody id="history-grid-body"></tbody>
                             </table>
                         </div>
