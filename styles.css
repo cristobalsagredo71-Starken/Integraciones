@@ -580,3 +580,24 @@ input[type="file"] { background: var(--surface-2); padding: 0.5rem; border: 1px 
 .main-content { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
 .toolbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; background: var(--surface); padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border); }
 .tabs-container { display: flex; gap: 0.5rem; }
+/* Botones de Icono */
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.btn-icon:hover {
+    background: var(--surface-3);
+    color: var(--text-main);
+}
+.btn-icon.danger:hover {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}

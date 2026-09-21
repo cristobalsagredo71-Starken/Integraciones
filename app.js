@@ -1,5 +1,5 @@
 ﻿// --- CONFIGURACIÃƒâ€œN SUPABASE ---
-// ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨ IMPORTANTE: REEMPLAZA "TU_API_KEY_AQUI" CON TU CLAVE "anon public" ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨
+// í°Ã…Â¸Ã…Â¡Ã‚Â¨ IMPORTANTE: REEMPLAZA "TU_API_KEY_AQUI" CON TU CLAVE "anon public" í°Ã…Â¸Ã…Â¡Ã‚Â¨
 const SUPABASE_URL = 'https://dzmsfxnvfardckddvzjt.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_J0eJ5rRXzERV8RxiYk95sg_NTd8JWYN';
 
@@ -58,11 +58,11 @@ function renderAttachments(attachmentsStr) {
     try {
         const arr = JSON.parse(attachmentsStr);
         if (Array.isArray(arr)) {
-            return arr.map((url, i) => `<a href="${url}" target="_blank" style="color: var(--info); font-size: 0.8rem; margin-right: 0.5rem; display: inline-block;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo ${i}</a>`).join('');
+            return arr.map((url, i) => `<a href="${url}" target="_blank" style="color: var(--info); font-size: 0.8rem; margin-right: 0.5rem; display: inline-block;">í°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo ${i}</a>`).join('');
         }
-        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo</a>`;
+        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">í°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo</a>`;
     } catch (e) {
-        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo</a>`;
+        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">í°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo</a>`;
     }
 }
 
@@ -295,7 +295,7 @@ const renderInitRow = (init) => {
             ${(init.logs && init.logs.length > 0) ? `
             <tr id="bitacora-${init.id}" style="display: none; background: var(--bg-color);">
                 <td colspan="8" style="padding: 1rem 1rem 1rem 3rem; border-bottom: 1px solid var(--panel-border);">
-                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem; border-bottom: 1px dashed var(--panel-border); padding-bottom: 0.25rem; display: inline-block;">HISTORIAL DE BITÃƒÂCORA</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem; border-bottom: 1px dashed var(--panel-border); padding-bottom: 0.25rem; display: inline-block;">HISTORIAL DE BITíCORA</div>
                     <div style="max-height: 120px; overflow-y: auto; padding-right: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
                         ${init.logs.map(log => `
                             <div style="display: flex; gap: 1rem; align-items: baseline;">
@@ -801,7 +801,7 @@ function renderConductorGrid() {
     const flows = clientFlows["Conductor Regular"] || [];
     
     if (flows.length === 0) {
-        conductorGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1;">No hay flujos subidos al Conductor Regular todavÃƒÂ­a.</p>';
+        conductorGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1;">No hay flujos subidos al Conductor Regular todaví­a.</p>';
         return;
     }
     
@@ -962,7 +962,7 @@ if(btnAddLog) {
         
         currentLogs.unshift({
             date: dateStr,
-            author: 'PMO (CristÃƒÂ³bal)',
+            author: 'PMO (Cristóbal)',
             text: input.value.trim()
         });
         
@@ -1007,7 +1007,7 @@ function renderCharts() {
         });
 
         if (!window.Chart) {
-            ctxRev.parentElement.innerHTML += '<p style="color:red">Error: Chart.js no cargÃƒÂ³.</p>';
+            ctxRev.parentElement.innerHTML += '<p style="color:red">Error: Chart.js no cargó.</p>';
             return;
         }
 
