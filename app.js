@@ -1,4 +1,4 @@
-﻿// --- CONFIGURACIÃƒâ€œN SUPABASE ---
+// --- CONFIGURACIÃƒâ€œN SUPABASE ---
 // ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨ IMPORTANTE: REEMPLAZA "TU_API_KEY_AQUI" CON TU CLAVE "anon public" ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨
 const SUPABASE_URL = 'https://dzmsfxnvfardckddvzjt.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_J0eJ5rRXzERV8RxiYk95sg_NTd8JWYN';
@@ -337,7 +337,7 @@ const renderInitRow = (init) => {
                 ${maxPriority >= 4 ? `<span style="font-size: 0.8rem; color: var(--danger); margin-left: 4px;">(P${maxPriority})</span>` : ''}
             </td>
             <td>
-                ${hasBlocked ? `<span style="color: var(--danger); font-size: 0.9rem;">âš ï¸ Hay Bloqueos</span>` : `<span style="color: var(--info); font-size: 0.9rem;">âœ… Sano</span>`}
+                ${hasBlocked ? `<span style="color: var(--danger); font-size: 0.9rem;">⚠️ Hay Bloqueos</span>` : `<span style="color: var(--info); font-size: 0.9rem;">✅ Sano</span>`}
             </td>
         `;
         gridBody.appendChild(tr);
