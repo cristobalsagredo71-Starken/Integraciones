@@ -1159,7 +1159,7 @@ window.uploadKitFile = async (inputId, fileName) => {
     statusDiv.textContent = 'Subiendo ' + fileName + '...';
 
     try {
-        const { data, error } = await supabaseClient.storage
+        const { data, error } = await client.storage
             .from('onboarding_kit')
             .upload(fileName, file, {
                 cacheControl: '3600',
