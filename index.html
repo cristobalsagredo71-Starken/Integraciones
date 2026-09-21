@@ -47,8 +47,8 @@
         <button class="tab-btn" onclick="switchTab('clientes')" id="tab-clientes">Directorio Clientes</button>
         <button class="tab-btn" onclick="switchTab('sistemas')" id="tab-sistemas">Sistemas</button>
         <button class="tab-btn" onclick="switchTab('conductor')" id="tab-conductor">Conductor Regular</button>
-        <button class="tab-btn" onclick="switchTab('metricas')" id="tab-metricas">MÃ©tricas</button>
-        <button class="tab-btn" onclick="switchTab('kit')" id="tab-kit">GestiÃ³n Kit</button>
+        <button class="tab-btn" onclick="switchTab('metricas')" id="tab-metricas">Métricas</button>
+        <button class="tab-btn" onclick="switchTab('kit')" id="tab-kit">Gestión Kit</button>
     </div>
     <button class="btn-primary" id="btn-new-initiative">
         + Nueva Iniciativa
@@ -72,7 +72,7 @@
                     </tr>
                     </thead>
                     <tbody id="grid-body">
-                        <!-- JS Inyecta el acordeÃ³n aquÃ­ -->
+                        <!-- JS Inyecta el acordeÃƒÂ³n aquÃƒÂ­ -->
                     </tbody>
                 </table>
             </div>
@@ -84,7 +84,7 @@
                             <th>Cliente</th>
                             <th>Sponsor (KAM)</th>
                             <th>Volumen / Fac.</th>
-                            <th>NÂ° Pedidas</th>
+                            <th>NÃ‚Â° Pedidas</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -106,11 +106,11 @@
       <div class="table-container" id="view-metricas" style="display: none; padding: 2rem;">
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
                 <div>
-                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">DistribuciÃ³n por Fase</h3>
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">DistribuciÃƒÂ³n por Fase</h3>
                     <canvas id="chartPhase"></canvas>
                 </div>
                 <div>
-                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">DistribuciÃ³n por Responsable</h3>
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">DistribuciÃƒÂ³n por Responsable</h3>
                     <canvas id="chartOwner"></canvas>
                 </div>
             </div>
@@ -120,7 +120,7 @@
                     <canvas id="chartVolume"></canvas>
                 </div>
                 <div>
-                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">Ranking FacturaciÃ³n (Top 10)</h3>
+                    <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px dashed var(--border); padding-bottom: 0.5rem;">Ranking FacturaciÃƒÂ³n (Top 10)</h3>
                     <canvas id="chartRevenue"></canvas>
                 </div>
             </div>
@@ -130,25 +130,25 @@
           <div class="panel" style="padding: 2rem;">
               <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Repositorio de flujos operativos y manuales transversales de la PMO.</p>
               <div id="conductor-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
-                  <!-- Tarjetas de flujos se inyectarÃ¡n aquÃ­ -->
+                  <!-- Tarjetas de flujos se inyectarÃƒÂ¡n aquÃƒÂ­ -->
               </div>
           </div>
       </div>
               <!-- VISTA GESTION KIT -->
         <div id="view-kit" style="display: none; padding-top: 1rem;">
             <div style="background: var(--surface); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
-                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">Gestión Kit de Onboarding</h3>
-                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px;">Sube los archivos PDF oficiales para que estén disponibles automáticamente en el portal de los KAM. Usa los nombres de archivo exactos solicitados.</p>
+                <h3 style="margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">GestiÃ³n Kit de Onboarding</h3>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px;">Sube los archivos PDF oficiales para que estÃ©n disponibles automÃ¡ticamente en el portal de los KAM. Usa los nombres de archivo exactos solicitados.</p>
                 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Catálogo Funcional de APIs</label>
+                        <label>CatÃ¡logo Funcional de APIs</label>
                         <input type="file" id="file-catalogo" accept="application/pdf">
                         <button class="btn-secondary" onclick="uploadKitFile('file-catalogo', 'Flujo_Funcional_APIs_Starken.pdf')" style="margin-top: 0.5rem; width: 100%;">Subir y Reemplazar</button>
                     </div>
                     
                     <div class="form-group">
-                        <label>Diccionario de Homologación</label>
+                        <label>Diccionario de HomologaciÃ³n</label>
                         <input type="file" id="file-diccionario" accept="application/pdf, .xlsx, .csv">
                         <button class="btn-secondary" onclick="uploadKitFile('file-diccionario', 'Diccionario_Homologacion_Starken.pdf')" style="margin-top: 0.5rem; width: 100%;">Subir y Reemplazar</button>
                     </div>
@@ -183,7 +183,7 @@
                     <h3>Datos del Cliente</h3>
                     <div class="form-grid full-width" style="gap: 1rem;">
                         <div class="form-group" id="client-name-group">
-                            <label>RazÃ³n Social / Nombre</label>
+                            <label>RazÃƒÂ³n Social / Nombre</label>
                             <input type="text" id="input-client-name" required placeholder="Ej: Walmart">
                         </div>
                         <div class="form-group">
@@ -199,7 +199,7 @@
                             </div>
                         </div>
                         <div class="form-group full-width">
-                            <label>DocumentaciÃ³n General del Cliente (Links)</label>
+                            <label>DocumentaciÃƒÂ³n General del Cliente (Links)</label>
                             <textarea id="input-client-docs" rows="2" placeholder="Ej: Link a contratos..."></textarea>
                         </div>
                         <div class="form-group full-width">
@@ -212,12 +212,12 @@
                             <input type="number" id="input-volume">
                         </div>
                         <div class="form-group">
-                            <label>FacturaciÃ³n Mensual Promedio (CLP)</label>
+                            <label>FacturaciÃƒÂ³n Mensual Promedio (CLP)</label>
                             <input type="number" id="input-revenue">
                         </div>
                         
                         <div class="form-group full-width" style="margin-top: 1rem;">
-                            <h4>HistÃ³rico Mensual del Cliente</h4>
+                            <h4>HistÃƒÂ³rico Mensual del Cliente</h4>
                             <div class="form-grid" style="align-items: end; margin-bottom: 1rem;">
                                 <div class="form-group">
                                     <label>Mes</label>
@@ -228,7 +228,7 @@
                                     <input type="number" id="input-hist-volume">
                                 </div>
                                 <div class="form-group">
-                                    <label>FacturaciÃ³n (CLP)</label>
+                                    <label>FacturaciÃƒÂ³n (CLP)</label>
                                     <input type="number" id="input-hist-revenue">
                                 </div>
                                 <div class="form-group">
@@ -236,7 +236,7 @@
                                 </div>
                             </div>
                             <table class="data-grid" style="font-size: 0.8rem;">
-                                <thead><tr><th>Mes</th><th>OFs</th><th>FacturaciÃ³n</th><th></th></tr></thead>
+                                <thead><tr><th>Mes</th><th>OFs</th><th>FacturaciÃƒÂ³n</th><th></th></tr></thead>
                                 <tbody id="history-grid-body"></tbody>
                             </table>
                         </div>
@@ -267,7 +267,7 @@
                             <!-- Clientes JS -->
                         </select>
                         <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">
-                            Si el cliente no existe, crÃ©alo primero desde la pestaÃ±a "Directorio Clientes".
+                            Si el cliente no existe, crÃƒÂ©alo primero desde la pestaÃƒÂ±a "Directorio Clientes".
                         </small>
                     </div>
                 </div>
@@ -277,7 +277,7 @@
                     <div class="form-grid">
                                                 <div class="form-group full-width">
                             <label>Nombre de la Pedida</label>
-                            <input type="text" id="input-name" required placeholder="Ej: IntegraciÃ³n LI">
+                            <input type="text" id="input-name" required placeholder="Ej: IntegraciÃƒÂ³n LI">
                         </div>
                         <div class="form-group full-width">
                             <label>Link a Ticket de Jira (Opcional)</label>
@@ -288,8 +288,8 @@
                             <input type="url" id="input-confluence-link" placeholder="Ej: https://starken.atlassian.net/wiki/spaces/...">
                         </div>
                         <div class="form-group full-width">
-                            <label>DocumentaciÃ³n EspecÃ­fica (Links)</label>
-                            <textarea id="input-documentation" rows="2" placeholder="Ej: Swagger, manuales tÃ©cnicos de la pedida..."></textarea>
+                            <label>DocumentaciÃƒÂ³n EspecÃƒÂ­fica (Links)</label>
+                            <textarea id="input-documentation" rows="2" placeholder="Ej: Swagger, manuales tÃƒÂ©cnicos de la pedida..."></textarea>
                         </div>
                         <div class="form-group full-width">
                             <label>Archivo Adjunto (Opcional - Puedes seleccionar varios)</label>
@@ -304,11 +304,11 @@
                                 <option value="2">2 - Baja</option>
                                 <option value="3">3 - Media</option>
                                 <option value="4">4 - Alta</option>
-                                <option value="5">5 - CrÃ­tica ??</option>
+                                <option value="5">5 - CrÃƒÂ­tica ??</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Modelo OperaciÃ³n</label>
+                            <label>Modelo OperaciÃƒÂ³n</label>
                             <select id="input-model">
                                 <option value="POR DEFINIR">(Por definir)</option>
                                 <option value="INHOUSE">Inhouse</option>
@@ -321,10 +321,10 @@
                 </div>
 
                 <div class="form-section">
-                    <h3>3. Esfuerzo TÃ©cnico</h3>
+                    <h3>3. Esfuerzo TÃƒÂ©cnico</h3>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Tipo de IntegraciÃ³n</label>
+                            <label>Tipo de IntegraciÃƒÂ³n</label>
                             <select id="input-type">
                                 <option value="POR DEFINIR">(Por definir)</option>
                                 <option value="NATIVA_API">Nativa / API REST</option>
@@ -357,11 +357,11 @@
                             <label>Fase Actual</label>
                             <select id="input-phase">
                                 <option value="POR DEFINIR">(Por definir)</option>
-                                <option value="EVALUACION">EvaluaciÃ³n Comercial</option>
+                                <option value="EVALUACION">EvaluaciÃƒÂ³n Comercial</option>
                                 <option value="DISCOVERY">Discovery</option>
-                                <option value="DISENO">DiseÃ±o</option>
-                                <option value="IMPLEMENTACION">ImplementaciÃ³n</option>
-                                <option value="QA">QA / CertificaciÃ³n</option>
+                                <option value="DISENO">DiseÃƒÂ±o</option>
+                                <option value="IMPLEMENTACION">ImplementaciÃƒÂ³n</option>
+                                <option value="QA">QA / CertificaciÃƒÂ³n</option>
                                 <option value="GO_LIVE">Go Live</option>
                                 <option value="STANDBY">Standby / Bloqueado</option>
                             </select>
@@ -395,7 +395,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label style="color: var(--primary);">Fechas DiseÃ±o</label>
+                            <label style="color: var(--primary);">Fechas DiseÃƒÂ±o</label>
                             <div style="display: flex; gap: 1rem;">
                                 <div style="flex: 1;">
                                     <label style="font-size: 0.8rem;">Inicio</label>
@@ -442,6 +442,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 

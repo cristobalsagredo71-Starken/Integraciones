@@ -1,5 +1,5 @@
-﻿// --- CONFIGURACIÃ“N SUPABASE ---
-// Ã°Å¸Å¡Â¨ IMPORTANTE: REEMPLAZA "TU_API_KEY_AQUI" CON TU CLAVE "anon public" Ã°Å¸Å¡Â¨
+﻿// --- CONFIGURACIÃƒâ€œN SUPABASE ---
+// ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨ IMPORTANTE: REEMPLAZA "TU_API_KEY_AQUI" CON TU CLAVE "anon public" ÃƒÂ°Ã…Â¸Ã…Â¡Ã‚Â¨
 const SUPABASE_URL = 'https://dzmsfxnvfardckddvzjt.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_J0eJ5rRXzERV8RxiYk95sg_NTd8JWYN';
 
@@ -58,11 +58,11 @@ function renderAttachments(attachmentsStr) {
     try {
         const arr = JSON.parse(attachmentsStr);
         if (Array.isArray(arr)) {
-            return arr.map((url, i) => `<a href="${url}" target="_blank" style="color: var(--info); font-size: 0.8rem; margin-right: 0.5rem; display: inline-block;">Ã°Å¸â€œÅ½ Archivo ${i}</a>`).join('');
+            return arr.map((url, i) => `<a href="${url}" target="_blank" style="color: var(--info); font-size: 0.8rem; margin-right: 0.5rem; display: inline-block;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo ${i}</a>`).join('');
         }
-        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">Ã°Å¸â€œÅ½ Archivo</a>`;
+        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo</a>`;
     } catch (e) {
-        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">Ã°Å¸â€œÅ½ Archivo</a>`;
+        return `<a href="${attachmentsStr}" target="_blank" style="color: var(--info); font-size: 0.8rem;">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Archivo</a>`;
     }
 }
 
@@ -117,7 +117,7 @@ async function fetchInitiatives() {
         renderGrid();
     } catch (err) {
         console.error("Error cargando datos:", err.message);
-        gridBody.innerHTML = `<tr><td colspan="7" style="color: var(--danger); text-align: center;">Error de ConexiÃƒÂ³n: ${err.message}. AsegÃƒÂºrate de poner tu API Key en app.js y crear la tabla en Supabase.</td></tr>`;
+        gridBody.innerHTML = `<tr><td colspan="7" style="color: var(--danger); text-align: center;">Error de ConexiÃƒÆ’Ã‚Â³n: ${err.message}. AsegÃƒÆ’Ã‚Âºrate de poner tu API Key en app.js y crear la tabla en Supabase.</td></tr>`;
     }
 }
 
@@ -157,7 +157,7 @@ function openFlowsModal(clientName) {
     const existing = document.getElementById('dynamic-flows-modal');
     if (existing) existing.remove();
     
-    let linksHtml = flows.map(f => `<a href="${f.url}" target="_blank" class="badge-tag" style="display: block; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); color: var(--text-primary); text-decoration: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; text-align: center;">ðŸ“„ ${f.name}</a>`).join('');
+    let linksHtml = flows.map(f => `<a href="${f.url}" target="_blank" class="badge-tag" style="display: block; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); color: var(--text-primary); text-decoration: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.9rem; text-align: center;">Ã°Å¸â€œâ€ž ${f.name}</a>`).join('');
     
     const modalHtml = `
     <div id="dynamic-flows-modal" class="modal-overlay active" style="z-index: 9999;">
@@ -210,7 +210,7 @@ function renderGrid() {
     });
 
     if (filteredInits.length === 0 && initiatives.length > 0) {
-        gridBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay resultados para tu bÃºsqueda</td></tr>';
+        gridBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay resultados para tu bÃƒÂºsqueda</td></tr>';
         return;
     }
     
@@ -245,14 +245,14 @@ window.toggleBitacora = (id) => {
 };
 const renderInitRow = (init) => {
         const priorityHtml = init.priority >= 4 
-            ? `<span class="priority-badge p${init.priority}">P${init.priority}${init.priority === 5 ? ' ðŸ”¥' : ''}</span>`
+            ? `<span class="priority-badge p${init.priority}">P${init.priority}${init.priority === 5 ? ' Ã°Å¸â€Â¥' : ''}</span>`
             : (init.priority > 0 ? `<span class="priority-badge p${init.priority}">P${init.priority}</span>` : '-');
 
         let bottleneckHtml = '-';
         if (init.phase === 'STANDBY') {
-            bottleneckHtml = `<span style="color: var(--danger)">ðŸ›‘ Bloqueada: ${init.bottleneck || 'Sin motivo'}</span>`;
+            bottleneckHtml = `<span style="color: var(--danger)">Ã°Å¸â€ºâ€˜ Bloqueada: ${init.bottleneck || 'Sin motivo'}</span>`;
         } else if (init.bottleneck) {
-            bottleneckHtml = `<span style="color: var(--warning)">âš ï¸ ${init.bottleneck}</span>`;
+            bottleneckHtml = `<span style="color: var(--warning)">Ã¢Å¡Â Ã¯Â¸Â ${init.bottleneck}</span>`;
         }
         
         const datesHtml = `
@@ -267,9 +267,9 @@ const renderInitRow = (init) => {
                 <td style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);">${priorityHtml}</td>
                 <td style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                     <strong style="font-size: 1.05rem;">${init.name}</strong> ${getFlowsHtml(init.name)}
-                    ${(init.logs && init.logs.length > 0) ? `<button type="button" onclick="event.stopPropagation(); toggleBitacora('${init.id}')" class="badge-tag" style="background: rgba(107, 114, 128, 0.2); color: var(--text-muted); border: 1px solid rgba(107, 114, 128, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px; cursor: pointer;">BitÃ¡cora (${init.logs.length}) ðŸ“–</button>` : ''}
-                    ${init.jira_url ? `<br><a href="${init.jira_url}" target="_blank" class="badge-tag" style="background: rgba(38, 132, 255, 0.2); color: #4c9aff; border: 1px solid rgba(38,132,255,0.4); text-decoration: none; margin-top: 4px; display: inline-block;">Jira â†—</a>` : ''}
-                    ${init.confluence_link ? `<a href="${init.confluence_link}" target="_blank" class="badge-tag" style="background: rgba(0, 184, 217, 0.2); color: #00b8d9; border: 1px solid rgba(0, 184, 217, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px;">Confluence â†—</a>` : ''}
+                    ${(init.logs && init.logs.length > 0) ? `<button type="button" onclick="event.stopPropagation(); toggleBitacora('${init.id}')" class="badge-tag" style="background: rgba(107, 114, 128, 0.2); color: var(--text-muted); border: 1px solid rgba(107, 114, 128, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px; cursor: pointer;">BitÃƒÂ¡cora (${init.logs.length}) Ã°Å¸â€œâ€“</button>` : ''}
+                    ${init.jira_url ? `<br><a href="${init.jira_url}" target="_blank" class="badge-tag" style="background: rgba(38, 132, 255, 0.2); color: #4c9aff; border: 1px solid rgba(38,132,255,0.4); text-decoration: none; margin-top: 4px; display: inline-block;">Jira Ã¢â€ â€”</a>` : ''}
+                    ${init.confluence_link ? `<a href="${init.confluence_link}" target="_blank" class="badge-tag" style="background: rgba(0, 184, 217, 0.2); color: #00b8d9; border: 1px solid rgba(0, 184, 217, 0.4); text-decoration: none; margin-top: 4px; display: inline-block; margin-left: 4px;">Confluence Ã¢â€ â€”</a>` : ''}
                 </td>
                 <td style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                     <span class="badge" style="background: rgba(255,255,255,0.1)">${init.type}</span>
@@ -295,7 +295,7 @@ const renderInitRow = (init) => {
             ${(init.logs && init.logs.length > 0) ? `
             <tr id="bitacora-${init.id}" style="display: none; background: var(--bg-color);">
                 <td colspan="8" style="padding: 1rem 1rem 1rem 3rem; border-bottom: 1px solid var(--panel-border);">
-                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem; border-bottom: 1px dashed var(--panel-border); padding-bottom: 0.25rem; display: inline-block;">HISTORIAL DE BITÃCORA</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem; border-bottom: 1px dashed var(--panel-border); padding-bottom: 0.25rem; display: inline-block;">HISTORIAL DE BITÃƒÂCORA</div>
                     <div style="max-height: 120px; overflow-y: auto; padding-right: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
                         ${init.logs.map(log => `
                             <div style="display: flex; gap: 1rem; align-items: baseline;">
@@ -443,7 +443,7 @@ function renderClientsGrid() {
             <td>
                 <strong>${clientData.name}</strong> ${getFlowsHtml(clientData.name)}
                 <span class="tags-container">${(clientData.tags || []).map(t => `<span class="badge-tag ${t.toLowerCase()}">${t}</span>`).join('')}</span>
-                ${clientData.attachments ? `<br><a href="${clientData.attachments}" target="_blank" style="font-size: 0.8rem; color: var(--info);">Ã°Å¸â€œÅ½ Ver DocumentaciÃƒÂ³n</a>` : ''}
+                ${clientData.attachments ? `<br><a href="${clientData.attachments}" target="_blank" style="font-size: 0.8rem; color: var(--info);">ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â½ Ver DocumentaciÃƒÆ’Ã‚Â³n</a>` : ''}
             </td>
             <td>${clientData.sponsor || '-'}</td>
             <td>
@@ -467,7 +467,7 @@ function renderClientsGrid() {
 }
 
 window.deleteClientSoft = async (id) => {
-    if (!confirm('Ã‚Â¿EstÃƒÂ¡s seguro de que quieres eliminar este cliente? Esto ocultarÃƒÂ¡ todas sus pedidas.')) return;
+    if (!confirm('Ãƒâ€šÃ‚Â¿EstÃƒÆ’Ã‚Â¡s seguro de que quieres eliminar este cliente? Esto ocultarÃƒÆ’Ã‚Â¡ todas sus pedidas.')) return;
     try {
         const { error } = await client
             .from('clients')
@@ -801,7 +801,7 @@ function renderConductorGrid() {
     const flows = clientFlows["Conductor Regular"] || [];
     
     if (flows.length === 0) {
-        conductorGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1;">No hay flujos subidos al Conductor Regular todavÃ­a.</p>';
+        conductorGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1;">No hay flujos subidos al Conductor Regular todavÃƒÂ­a.</p>';
         return;
     }
     
@@ -938,14 +938,14 @@ function renderLogs() {
     if (!container) return;
     
     if (currentLogs.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">No hay registros en la bitÃ¡cora.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center;">No hay registros en la bitÃƒÂ¡cora.</p>';
         return;
     }
     
     container.innerHTML = currentLogs.map((log, index) => `
         <div class="log-entry" style="position: relative;">
             <button type="button" onclick="deleteLog(${index})" class="btn-icon" style="position: absolute; right: 0; top: 0.5rem; color: var(--danger); font-size: 1.1rem; border: none; background: transparent; cursor: pointer;">&times;</button>
-            <div class="log-meta">${log.date} â€¢ ${log.author || 'Starken PMO'}</div>
+            <div class="log-meta">${log.date} Ã¢â‚¬Â¢ ${log.author || 'Starken PMO'}</div>
             <div class="log-content">${log.text}</div>
         </div>
     `).join('');
@@ -962,7 +962,7 @@ if(btnAddLog) {
         
         currentLogs.unshift({
             date: dateStr,
-            author: 'PMO (CristÃ³bal)',
+            author: 'PMO (CristÃƒÂ³bal)',
             text: input.value.trim()
         });
         
@@ -1007,7 +1007,7 @@ function renderCharts() {
         });
 
         if (!window.Chart) {
-            ctxRev.parentElement.innerHTML += '<p style="color:red">Error: Chart.js no cargÃ³.</p>';
+            ctxRev.parentElement.innerHTML += '<p style="color:red">Error: Chart.js no cargÃƒÂ³.</p>';
             return;
         }
 
@@ -1090,7 +1090,7 @@ function renderCharts() {
             data: {
                 labels: sortedByRevenue.map(c => c.name),
                 datasets: [{
-                    label: 'FacturaciÃ³n ($)',
+                    label: 'Facturación ($)',
                     data: sortedByRevenue.map(c => c.revenue),
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: 'rgba(59, 130, 246, 1)',
@@ -1169,10 +1169,11 @@ window.uploadKitFile = async (inputId, fileName) => {
         if (error) throw error;
         
         statusDiv.style.color = 'var(--success)';
-        statusDiv.textContent = '¡Subido con éxito! (Nota: asegúrate de que el bucket "onboarding_kit" exista y sea público en Supabase).';
+        statusDiv.textContent = 'Â¡Subido con Ã©xito! (Nota: asegÃºrate de que el bucket "onboarding_kit" exista y sea pÃºblico en Supabase).';
     } catch (error) {
         console.error(error);
         statusDiv.style.color = 'var(--danger)';
         statusDiv.textContent = 'Error: ' + error.message;
     }
 };
+
